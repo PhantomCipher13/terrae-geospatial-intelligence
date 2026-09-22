@@ -5,6 +5,18 @@
 
 ---
 
+## 🌐 Live Production Deployments
+
+| Component | Platform | Live URL | Description |
+| :--- | :--- | :--- | :--- |
+| **Frontend Web Console** | **Vercel** | **[https://frontend-seven-lac-65.vercel.app](https://frontend-seven-lac-65.vercel.app)** | Interactive Next.js 14 console & Earth Intelligence workstation |
+| **Backend REST API** | **Render** | **[https://terrae-backend.onrender.com](https://terrae-backend.onrender.com)** | Operational FastAPI service & branded developer portal |
+| **Interactive API Docs** | **Render** | **[https://terrae-backend.onrender.com/docs](https://terrae-backend.onrender.com/docs)** | OpenAPI / Swagger UI live testbed |
+| **Health Probe** | **Render** | **[https://terrae-backend.onrender.com/health](https://terrae-backend.onrender.com/health)** | Real-time service uptime probe (`HTTP 200`) |
+| **System Status** | **Render** | **[https://terrae-backend.onrender.com/api/status](https://terrae-backend.onrender.com/api/status)** | FAISS telemetry & pipeline capability matrix |
+
+---
+
 ## 1. Executive Summary
 **TERRAE** is a self-contained, air-gapped Earth Intelligence platform that moves remote sensing analysis beyond opaque binary change masks. Built on multimodal GeoAI engineering, the system integrates natural-language query discovery with co-registered temporal satellite stacks, multi-spectral physical attribution, three-date trajectory partitioning, and an auditable decision layer.
 
