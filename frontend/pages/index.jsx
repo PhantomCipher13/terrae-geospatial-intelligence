@@ -268,6 +268,14 @@ export default function Home() {
     setSliderPos(p);
   }
 
+  function handleSliderTouchMove(e) {
+    if (!isDraggingSlider.current || !e.touches || e.touches.length === 0) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const touch = e.touches[0];
+    const p = Math.max(0, Math.min(100, ((touch.clientX - rect.left) / rect.width) * 100));
+    setSliderPos(p);
+  }
+
   function scrollToSection(id) {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -411,59 +419,38 @@ export default function Home() {
 
               <div className="hero-search-label">DESCRIBE WHAT YOU WANT TO INVESTIGATE</div>
 
-              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
+              <div className="hero-search-row">
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="e.g. new construction and buildings"
-                  style={{
-                    flex: 1,
-                    background: '#161513',
-                    color: '#FBF9F4',
-                    border: '1px solid #C5A869',
-                    padding: '0.65rem 1rem',
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: '0.85rem',
-                  }}
+                  className="hero-search-input"
                   onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                 />
                 <button
                   onClick={() => handleSearch()}
                   disabled={searching}
-                  style={{
-                    background: '#B89A62',
-                    color: '#121110',
-                    border: '1px solid #C5A869',
-                    fontWeight: 700,
-                    padding: '0.65rem 1.5rem',
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: '0.75rem',
-                    cursor: 'pointer',
-                  }}
+                  className="hero-search-btn"
                 >
                   {searching ? 'SEARCHING...' : 'SEARCH →'}
                 </button>
               </div>
 
               {/* Suggestion Chips */}
-              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem' }}>
-                {['new construction', 'dense forest', 'urban near water'].map((chip) => (
+              <div className="hero-chips-row">
+                {[
+                  'new construction and buildings',
+                  'agricultural vegetation greening',
+                  'open-pit mining excavation',
+                ].map((chip) => (
                   <button
                     key={chip}
                     onClick={() => {
                       setSearchQuery(chip);
                       handleSearch(chip);
                     }}
-                    style={{
-                      background: '#1E1C19',
-                      color: '#FBF9F4',
-                      border: '1px solid #3A352D',
-                      padding: '0.35rem 0.75rem',
-                      fontFamily: "'JetBrains Mono', monospace",
-                      fontSize: '0.68rem',
-                      cursor: 'pointer',
-                    }}
+                    className="hero-chip-btn"
                   >
                     {chip}
                   </button>
@@ -472,7 +459,7 @@ export default function Home() {
 
               {searchResult && (
                 <div className="hero-candidate-card">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
                     <div>
                       <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.65rem', color: '#C5A869', fontWeight: 700 }}>
                         TERRAE / DISCOVER · TOP CANDIDATE · SIMILARITY: {searchResult.similarity_score.toFixed(4)}
@@ -487,11 +474,14 @@ export default function Home() {
                         background: '#B89A62',
                         color: '#121110',
                         border: 'none',
-                        padding: '0.4rem 0.85rem',
+                        padding: '0.5rem 1rem',
                         fontWeight: 700,
-                        fontSize: '0.65rem',
+                        fontSize: '0.68rem',
                         fontFamily: "'JetBrains Mono', monospace",
                         cursor: 'pointer',
+                        minHeight: '44px',
+                        display: 'inline-flex',
+                        alignItems: 'center',
                       }}
                     >
                       INVESTIGATE →
@@ -504,40 +494,42 @@ export default function Home() {
 
           {/* 3. SECTION 02: PHILOSOPHY */}
           <div className="section-porcelain" id="sec_philosophy">
-            <div style={{ display: 'grid', gridTemplateColumns: '7fr 5fr', gap: '4rem', alignItems: 'center' }}>
-              <div>
-                <div className="editorial-eyebrow-dark">TERRAE / PHILOSOPHY</div>
-                <div className="philosophy-quote">
-                  &ldquo;Satellite imagery shows what is there.<br />
-                  TERRAE investigates what changed.&rdquo;
+            <div className="section-inner-container">
+              <div className="philosophy-grid">
+                <div>
+                  <div className="editorial-eyebrow-dark">TERRAE / PHILOSOPHY</div>
+                  <div className="philosophy-quote">
+                    &ldquo;Satellite imagery shows what is there.<br />
+                    TERRAE investigates what changed.&rdquo;
+                  </div>
+                  <p style={{ color: '#454038', fontSize: '1.05rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+                    Raw pixels reveal surface reflectance; they do not reveal cause. TERRAE combines sub-pixel co-registration with physical multi-spectral attribution and temporal trajectory verification to transform observation into auditable intelligence.
+                  </p>
+                  <div style={{ display: 'flex', gap: '2rem', borderTop: '1px solid #D9D1C4', paddingTop: '1.25rem', flexWrap: 'wrap' }}>
+                    <div>
+                      <div className="cs-metric-lbl">RESOLUTION</div>
+                      <div className="cs-metric-val">10M GSD</div>
+                    </div>
+                    <div>
+                      <div className="cs-metric-lbl">SPECTRAL BANDS</div>
+                      <div className="cs-metric-val">4 BANDS (BOA)</div>
+                    </div>
+                    <div>
+                      <div className="cs-metric-lbl">VERDICT FRAMEWORK</div>
+                      <div className="cs-metric-val" style={{ fontSize: '1.05rem', marginTop: '0.25rem' }}>SUPPORTED / REVIEW</div>
+                    </div>
+                  </div>
                 </div>
-                <p style={{ color: '#454038', fontSize: '1.05rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-                  Raw pixels reveal surface reflectance; they do not reveal cause. TERRAE combines sub-pixel co-registration with physical multi-spectral attribution and temporal trajectory verification to transform observation into auditable intelligence.
-                </p>
-                <div style={{ display: 'flex', gap: '2rem', borderTop: '1px solid #D9D1C4', paddingTop: '1.25rem' }}>
-                  <div>
-                    <div className="cs-metric-lbl">RESOLUTION</div>
-                    <div className="cs-metric-val">10M GSD</div>
-                  </div>
-                  <div>
-                    <div className="cs-metric-lbl">SPECTRAL BANDS</div>
-                    <div className="cs-metric-val">4 BANDS (BOA)</div>
-                  </div>
-                  <div>
-                    <div className="cs-metric-lbl">VERDICT FRAMEWORK</div>
-                    <div className="cs-metric-val" style={{ fontSize: '1.05rem', marginTop: '0.25rem' }}>SUPPORTED / REVIEW</div>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div className="philosophy-card-stage">
-                  <div className="philosophy-card-header">
-                    <span style={{ fontSize: '0.65rem', color: '#9A7842', fontWeight: 700 }}>COLOR-INFRARED (CIR) COMPOSITE</span>
-                    <span style={{ fontSize: '0.60rem', color: '#82796D' }}>NIR B08 / RED B04 / GREEN B03</span>
-                  </div>
-                  <img src="/assets/beirut_t1_cir.jpg" style={{ width: '100%', height: '340px', objectFit: 'cover', display: 'block' }} alt="CIR Composite" />
-                  <div style={{ padding: '0.75rem 1rem', background: '#F4F0E8', borderTop: '1px solid #D9D1C4', fontSize: '0.72rem', color: '#454038', fontFamily: "'JetBrains Mono', monospace" }}>
-                    Chlorophyll-rich canopy reflects high NIR (ruby red); built concrete registers as cyan-grey.
+                <div>
+                  <div className="philosophy-card-stage">
+                    <div className="philosophy-card-header">
+                      <span style={{ fontSize: '0.65rem', color: '#9A7842', fontWeight: 700 }}>COLOR-INFRARED (CIR) COMPOSITE</span>
+                      <span style={{ fontSize: '0.60rem', color: '#82796D' }}>NIR B08 / RED B04 / GREEN B03</span>
+                    </div>
+                    <img src="/assets/beirut_t1_cir.jpg" style={{ width: '100%', height: '340px', objectFit: 'cover', display: 'block' }} alt="CIR Composite" />
+                    <div style={{ padding: '0.75rem 1rem', background: '#F4F0E8', borderTop: '1px solid #D9D1C4', fontSize: '0.72rem', color: '#454038', fontFamily: "'JetBrains Mono', monospace" }}>
+                      Chlorophyll-rich canopy reflects high NIR (ruby red); built concrete registers as cyan-grey.
+                    </div>
                   </div>
                 </div>
               </div>
@@ -546,114 +538,119 @@ export default function Home() {
 
           {/* 4. SECTION 03: METHOD (6-STAGE PROTOCOL) */}
           <div className="section-warm-ivory" id="sec_method">
-            <div className="editorial-eyebrow-dark">THE INVESTIGATION PROTOCOL</div>
-            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.4rem', fontWeight: 500, color: '#161513', marginBottom: '0.5rem' }}>
-              From Natural Intent to Auditable Decision
-            </div>
-            <p style={{ color: '#5A544A', fontSize: '1.05rem', maxWidth: '680px', marginBottom: '2.5rem' }}>
-              Every query executes a 6-stage investigation pipeline that enforces physical attribution, rejects noise, and logs an auditable evidence chain.
-            </p>
-
-            <div className="method-layout-grid">
-              {/* Left Sticky Plate */}
-              <div className="method-visualizer-card">
-                <div className="mv-header">
-                  <span id="methodBadgeStage" style={{ color: '#9A7842', fontWeight: 700 }}>
-                    {methodPlates[methodStep].badge}
-                  </span>
-                  <span style={{ color: '#82796D', fontSize: '0.62rem' }}>SENTINEL-2 L2A · 10M GSD</span>
-                </div>
-                <img
-                  id="methodHeroImg"
-                  src={methodPlates[methodStep].plate}
-                  style={{ width: '100%', height: '360px', objectFit: 'cover', display: 'block' }}
-                  alt="Method Step"
-                />
-                <div className="mv-caption-layer">
-                  <div id="methodHeroOverlay" style={{ color: '#9A7842', fontWeight: 700, marginBottom: '0.25rem' }}>
-                    {methodPlates[methodStep].overlay}
-                  </div>
-                  <div id="methodHeroMeta" style={{ color: '#5A544A', fontSize: '0.68rem', lineHeight: 1.4 }}>
-                    {methodPlates[methodStep].meta}
-                  </div>
-                </div>
+            <div className="section-inner-container">
+              <div className="editorial-eyebrow-dark">THE INVESTIGATION PROTOCOL</div>
+              <div className="section-headline-dark">
+                From Natural Intent to Auditable Decision
               </div>
+              <p className="section-subhead-dark">
+                Every query executes a 6-stage investigation pipeline that enforces physical attribution, rejects noise, and logs an auditable evidence chain.
+              </p>
 
-              {/* Right Steps */}
-              <div className="method-steps-track">
-                {methodPlates.map((s, idx) => (
-                  <div
-                    key={s.num}
-                    className={`method-step-row ${methodStep === idx ? 'active-step' : ''}`}
-                    onClick={() => setMethodStep(idx)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <div className="step-num-col">{s.num}</div>
-                    <div>
-                      <div className="step-name-col">{s.name}</div>
-                      <div className="step-title-col">{s.title}</div>
-                      <div className="step-desc-col">{s.sub}</div>
+              <div className="method-layout-grid">
+                {/* Left Sticky Plate */}
+                <div className="method-visualizer-card">
+                  <div className="mv-header">
+                    <span id="methodBadgeStage" style={{ color: '#9A7842', fontWeight: 700 }}>
+                      {methodPlates[methodStep].badge}
+                    </span>
+                    <span style={{ color: '#82796D', fontSize: '0.62rem' }}>SENTINEL-2 L2A · 10M GSD</span>
+                  </div>
+                  <img
+                    id="methodHeroImg"
+                    src={methodPlates[methodStep].plate}
+                    style={{ width: '100%', height: '360px', objectFit: 'contain', background: '#0E0D0C', display: 'block' }}
+                    alt="Method Step"
+                  />
+                  <div className="mv-caption-layer">
+                    <div id="methodHeroOverlay" style={{ color: '#9A7842', fontWeight: 700, marginBottom: '0.25rem' }}>
+                      {methodPlates[methodStep].overlay}
+                    </div>
+                    <div id="methodHeroMeta" style={{ color: '#5A544A', fontSize: '0.68rem', lineHeight: 1.4 }}>
+                      {methodPlates[methodStep].meta}
                     </div>
                   </div>
-                ))}
+                </div>
+
+                {/* Right Steps */}
+                <div className="method-steps-track">
+                  {methodPlates.map((s, idx) => (
+                    <div
+                      key={s.num}
+                      className={`method-step-row ${methodStep === idx ? 'active-step' : ''}`}
+                      onClick={() => setMethodStep(idx)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <div className="step-num-col">{s.num}</div>
+                      <div>
+                        <div className="step-name-col">{s.name}</div>
+                        <div className="step-title-col">{s.title}</div>
+                        <div className="step-desc-col">{s.sub}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
 
           {/* 5. SECTION 04: TEMPORAL STORY */}
           <div className="section-deep-forest" id="sec_temporal">
-            <div className="editorial-eyebrow">TEMPORAL PERSISTENCE</div>
-            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.4rem', fontWeight: 500, color: '#FBF9F4', marginBottom: '0.5rem' }}>
-              The Earth changes. The question is whether the change holds.
-            </div>
-            <p style={{ color: '#A3B5A6', fontSize: '1.05rem', maxWidth: '720px', marginBottom: '2.5rem' }}>
-              Single-pair change detection frequently confuses seasonal phenology with permanent development. TERRAE tracks multi-date trajectories across pre-monsoon, peak flush, and winter harvest.
-            </p>
+            <div className="section-inner-container">
+              <div className="editorial-eyebrow">TEMPORAL PERSISTENCE</div>
+              <div className="section-headline-light">
+                The Earth changes. The question is whether the change holds.
+              </div>
+              <p className="section-subhead-light">
+                Single-pair change detection frequently confuses seasonal phenology with permanent development. TERRAE tracks multi-date trajectories across pre-monsoon, peak flush, and winter harvest.
+              </p>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem', marginBottom: '1.5rem' }}>
-              {[
-                { date: 'T0 · 19 MAY 2023', phase: 'PRE-MONSOON DRY', src: '/assets/sentinel2_t0_rgb.jpg', stats: 'NIR: 0.480 · NDVI: +0.192' },
-                { date: 'TMID · 06 OCT 2023', phase: 'MONSOON GREEN PEAK', src: '/assets/sentinel2_tmid_rgb.jpg', stats: 'NIR: 0.279 · NDVI: +0.112 (GREATEST FLUSH)' },
-                { date: 'T1 · 05 DEC 2023', phase: 'WINTER DORMANCY', src: '/assets/sentinel2_t1_rgb.jpg', stats: 'NIR: 0.254 · NDVI: +0.092' },
-              ].map((panel, idx) => (
-                <div
-                  key={panel.date}
-                  style={{
-                    background: '#121714',
-                    border: temporalStage === idx ? '1px solid #C5A869' : '1px solid #233026',
-                    boxShadow: temporalStage === idx ? '0 0 20px rgba(197, 168, 105, 0.35)' : 'none',
-                    transition: 'all 0.3s ease',
-                  }}
-                  onClick={() => setTemporalStage(idx)}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 1rem', borderBottom: '1px solid #233026', fontFamily: "'JetBrains Mono', monospace" }}>
-                    <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#C5A869' }}>{panel.date}</span>
-                    <span style={{ fontSize: '0.60rem', color: '#A3B5A6' }}>{panel.phase}</span>
-                  </div>
-                  <img src={panel.src} style={{ width: '100%', height: '260px', objectFit: 'cover', display: 'block' }} alt={panel.date} />
-                  <div style={{ padding: '0.75rem 1rem', borderTop: '1px solid #233026', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.65rem', color: '#A3B5A6' }}>
-                    {panel.stats}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Scrubber Bar */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#121714', border: '1px solid #1C261F', padding: '1rem 1.5rem', fontFamily: "'JetBrains Mono', monospace" }}>
-              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.72rem', color: '#A3B5A6', fontWeight: 700 }}>OBSERVATION SCRUBBER:</span>
-                {['T0 (19 MAY 2023)', 'TMID (06 OCT 2023)', 'T1 (05 DEC 2023)'].map((pLabel, pIdx) => (
-                  <button
-                    key={pLabel}
-                    className={`orbital-pill ${temporalStage === pIdx ? 'active' : ''}`}
-                    onClick={() => setTemporalStage(pIdx)}
+              <div className="temporal-story-grid">
+                {[
+                  { date: 'T0 · 19 MAY 2023', phase: 'PRE-MONSOON DRY', src: '/assets/sentinel2_t0_rgb.jpg', stats: 'NIR: 0.480 · NDVI: +0.192' },
+                  { date: 'TMID · 06 OCT 2023', phase: 'MONSOON GREEN PEAK', src: '/assets/sentinel2_tmid_rgb.jpg', stats: 'NIR: 0.279 · NDVI: +0.112 (GREATEST FLUSH)' },
+                  { date: 'T1 · 05 DEC 2023', phase: 'WINTER DORMANCY', src: '/assets/sentinel2_t1_rgb.jpg', stats: 'NIR: 0.254 · NDVI: +0.092' },
+                ].map((panel, idx) => (
+                  <div
+                    key={panel.date}
+                    style={{
+                      background: '#121714',
+                      border: temporalStage === idx ? '1px solid #C5A869' : '1px solid #233026',
+                      boxShadow: temporalStage === idx ? '0 0 20px rgba(197, 168, 105, 0.35)' : 'none',
+                      transition: 'all 0.3s ease',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => setTemporalStage(idx)}
                   >
-                    {pLabel}
-                  </button>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 1rem', borderBottom: '1px solid #233026', fontFamily: "'JetBrains Mono', monospace" }}>
+                      <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#C5A869' }}>{panel.date}</span>
+                      <span style={{ fontSize: '0.60rem', color: '#A3B5A6' }}>{panel.phase}</span>
+                    </div>
+                    <img src={panel.src} style={{ width: '100%', height: '260px', objectFit: 'contain', background: '#070908', display: 'block' }} alt={panel.date} />
+                    <div style={{ padding: '0.75rem 1rem', borderTop: '1px solid #233026', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.65rem', color: '#A3B5A6' }}>
+                      {panel.stats}
+                    </div>
+                  </div>
                 ))}
               </div>
-              <div style={{ fontSize: '0.75rem', color: '#C5A869', fontWeight: 600 }}>
-                {temporalNarratives[temporalStage]}
+
+              {/* Scrubber Bar */}
+              <div className="temporal-scrubber-bar">
+                <div className="temporal-scrubber-pills">
+                  <span className="temporal-scrubber-lbl">OBSERVATION SCRUBBER:</span>
+                  {['T0 (19 MAY 2023)', 'TMID (06 OCT 2023)', 'T1 (05 DEC 2023)'].map((pLabel, pIdx) => (
+                    <button
+                      key={pLabel}
+                      className={`orbital-pill ${temporalStage === pIdx ? 'active' : ''}`}
+                      onClick={() => setTemporalStage(pIdx)}
+                    >
+                      {pLabel}
+                    </button>
+                  ))}
+                </div>
+                <div className="temporal-narrative-text">
+                  {temporalNarratives[temporalStage]}
+                </div>
               </div>
             </div>
           </div>
@@ -716,124 +713,138 @@ export default function Home() {
 
           {/* 7. SECTION 06: CASE STUDY 01 — CONTROLLED CONSTRUCTION */}
           <div className="section-warm-stone case-study-section" id="sec_case01">
-            <div style={{ display: 'grid', gridTemplateColumns: '5fr 7fr', gap: '3.5rem', alignItems: 'center' }}>
-              <div>
-                <div style={{ display: 'inline-block', background: 'rgba(154, 120, 66, 0.12)', border: '1px solid #C5A869', padding: '0.35rem 0.75rem', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.65rem', letterSpacing: '0.14em', color: '#9A7842', fontWeight: 700, marginBottom: '0.75rem' }}>
-                  CONTROLLED SYNTHETIC TEMPORAL BENCHMARK — NOT A REAL EARTH SCENE
-                </div>
-                <div className="editorial-eyebrow-dark">TERRAE / CASE 01 · CONTROLLED CONSTRUCTION</div>
-                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.2rem', fontWeight: 600, color: '#161513', marginBottom: '0.35rem' }}>
-                  Controlled Construction & Building Development
-                </div>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.68rem', color: '#736C61', marginBottom: '0.85rem' }}>
-                  SYNTHETIC TEMPORAL BENCHMARK · EPSG:32643 · 10M GSD · 65,536 PIXELS (256×256)
-                </div>
-                <p style={{ color: '#454038', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-                  Earth-observation imagery across other sections is derived from local GeoTIFF data; Case 01 is a controlled synthetic benchmark designed to test geometric edge-cases, tight spatial clustering, and algorithmic attribution against known ground truth.
-                </p>
+            <div className="section-inner-container">
+              <div className="case01-grid">
+                <div>
+                  <div className="synthetic-benchmark-badge">
+                    CONTROLLED SYNTHETIC TEMPORAL BENCHMARK — NOT A REAL EARTH SCENE
+                  </div>
+                  <div className="editorial-eyebrow-dark">TERRAE / CASE 01 · CONTROLLED CONSTRUCTION</div>
+                  <div className="section-headline-dark">
+                    Controlled Construction & Building Development
+                  </div>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.68rem', color: '#736C61', marginBottom: '0.85rem' }}>
+                    SYNTHETIC TEMPORAL BENCHMARK · EPSG:32643 · 10M GSD · 65,536 PIXELS (256×256)
+                  </div>
+                  <p style={{ color: '#454038', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+                    Earth-observation imagery across other sections is derived from local GeoTIFF data; Case 01 is a controlled synthetic benchmark designed to test geometric edge-cases, tight spatial clustering, and algorithmic attribution against known ground truth.
+                  </p>
 
-                <div className="cs-data-strip">
-                  <div>
-                    <div className="cs-metric-lbl">CHANGED FRACTION</div>
-                    <div className="cs-metric-val">11.5%</div>
-                  </div>
-                  <div>
-                    <div className="cs-metric-lbl">BUILT-SURFACE</div>
-                    <div className="cs-metric-val">97.1%</div>
-                  </div>
-                  <div>
-                    <div className="cs-metric-lbl">COHERENCE</div>
-                    <div className="cs-metric-val">99.7%</div>
-                  </div>
-                  <div>
-                    <div className="cs-metric-lbl">TRAJECTORY</div>
-                    <div className="cs-metric-val" style={{ fontSize: '1rem', marginTop: '0.25rem' }}>
-                      LATE-ONSET
+                  <div className="cs-data-strip">
+                    <div>
+                      <div className="cs-metric-lbl">CHANGED FRACTION</div>
+                      <div className="cs-metric-val">11.5%</div>
                     </div>
+                    <div>
+                      <div className="cs-metric-lbl">BUILT-SURFACE</div>
+                      <div className="cs-metric-val">97.1%</div>
+                    </div>
+                    <div>
+                      <div className="cs-metric-lbl">COHERENCE</div>
+                      <div className="cs-metric-val">99.7%</div>
+                    </div>
+                    <div>
+                      <div className="cs-metric-lbl">TRAJECTORY</div>
+                      <div className="cs-metric-val" style={{ fontSize: '1rem', marginTop: '0.25rem' }}>
+                        LATE-ONSET
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <span className="verdict-stamp vs-supported">✔ SUPPORTED · AFFIRMATIVE CONCLUSION</span>
+                  </div>
+                  <div className="slider-instruction-text">
+                    Drag or swipe slider on right to inspect Before vs After co-registered surface
                   </div>
                 </div>
 
                 <div>
-                  <span className="verdict-stamp vs-supported">✔ SUPPORTED · AFFIRMATIVE CONCLUSION</span>
-                </div>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.70rem', color: '#82796D', marginTop: '1rem' }}>
-                  Drag slider on right to inspect Before vs After co-registered surface
-                </div>
-              </div>
-
-              <div>
-                {/* 3-Phase Temporal Progression Strip */}
-                <div style={{ marginBottom: '1rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.64rem', color: '#82796D', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-                    <span>TEMPORAL GROUND TRUTH PROGRESSION</span>
-                    <span style={{ color: '#9A7842', fontWeight: 700 }}>10M GSD · 3 PHASES</span>
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem' }}>
-                    <div style={{ background: '#FBF9F4', border: '1px solid #D9D1C4', padding: '0.5rem', boxShadow: '0 4px 12px rgba(0,0,0,0.06)' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
-                        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.60rem', fontWeight: 700, color: '#82796D' }}>PHASE 01 · T0</span>
-                        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.54rem', color: '#82796D' }}>19 MAY</span>
-                      </div>
-                      <img src="/assets/controlled_t0_rgb.jpg" style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', display: 'block', border: '1px solid #D9D1C4' }} alt="T0 Baseline" />
-                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.62rem', fontWeight: 700, color: '#161513', marginTop: '0.35rem' }}>Natural Terrain</div>
-                      <div style={{ fontSize: '0.60rem', color: '#736C61', lineHeight: 1.3 }}>Undisturbed baseline soil & shrub</div>
+                  {/* 3-Phase Temporal Progression Strip */}
+                  <div style={{ marginBottom: '1rem' }}>
+                    <div className="phase-strip-header">
+                      <span>TEMPORAL GROUND TRUTH PROGRESSION</span>
+                      <span style={{ color: '#9A7842', fontWeight: 700 }}>10M GSD · 3 PHASES</span>
                     </div>
-                    <div style={{ background: '#FBF9F4', border: '1px solid #C5A869', padding: '0.5rem', boxShadow: '0 4px 12px rgba(0,0,0,0.06)' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
-                        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.60rem', fontWeight: 700, color: '#9A7842' }}>PHASE 02 · T1</span>
-                        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.54rem', color: '#9A7842' }}>06 OCT</span>
+                    <div className="phase-progression-grid">
+                      <div style={{ background: '#FBF9F4', border: '1px solid #D9D1C4', padding: '0.5rem', boxShadow: '0 4px 12px rgba(0,0,0,0.06)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
+                          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.60rem', fontWeight: 700, color: '#82796D' }}>PHASE 01 · T0</span>
+                          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.54rem', color: '#82796D' }}>19 MAY</span>
+                        </div>
+                        <img src="/assets/controlled_t0_rgb.jpg" style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', display: 'block', border: '1px solid #D9D1C4' }} alt="T0 Baseline" />
+                        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.62rem', fontWeight: 700, color: '#161513', marginTop: '0.35rem' }}>Natural Terrain</div>
+                        <div style={{ fontSize: '0.60rem', color: '#736C61', lineHeight: 1.3 }}>Undisturbed baseline soil & shrub</div>
                       </div>
-                      <img src="/assets/controlled_t1_rgb.jpg" style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', display: 'block', border: '1px solid #C5A869' }} alt="T1 Excavation" />
-                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.62rem', fontWeight: 700, color: '#161513', marginTop: '0.35rem' }}>Ground Excavation</div>
-                      <div style={{ fontSize: '0.60rem', color: '#736C61', lineHeight: 1.3 }}>Soil clearing & foundation works</div>
-                    </div>
-                    <div style={{ background: '#FBF9F4', border: '1px solid #435548', padding: '0.5rem', boxShadow: '0 4px 12px rgba(0,0,0,0.06)' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
-                        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.60rem', fontWeight: 700, color: '#435548' }}>PHASE 03 · T2</span>
-                        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.54rem', color: '#435548' }}>05 DEC</span>
+                      <div style={{ background: '#FBF9F4', border: '1px solid #C5A869', padding: '0.5rem', boxShadow: '0 4px 12px rgba(0,0,0,0.06)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
+                          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.60rem', fontWeight: 700, color: '#9A7842' }}>PHASE 02 · T1</span>
+                          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.54rem', color: '#9A7842' }}>06 OCT</span>
+                        </div>
+                        <img src="/assets/controlled_t1_rgb.jpg" style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', display: 'block', border: '1px solid #C5A869' }} alt="T1 Excavation" />
+                        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.62rem', fontWeight: 700, color: '#161513', marginTop: '0.35rem' }}>Ground Excavation</div>
+                        <div style={{ fontSize: '0.60rem', color: '#736C61', lineHeight: 1.3 }}>Soil clearing & foundation works</div>
                       </div>
-                      <img src="/assets/controlled_t2_rgb.jpg" style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', display: 'block', border: '1px solid #435548' }} alt="T2 Structure" />
-                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.62rem', fontWeight: 700, color: '#161513', marginTop: '0.35rem' }}>Built Structure</div>
-                      <div style={{ fontSize: '0.60rem', color: '#736C61', lineHeight: 1.3 }}>Erected concrete building footprint</div>
+                      <div style={{ background: '#FBF9F4', border: '1px solid #435548', padding: '0.5rem', boxShadow: '0 4px 12px rgba(0,0,0,0.06)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
+                          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.60rem', fontWeight: 700, color: '#435548' }}>PHASE 03 · T2</span>
+                          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.54rem', color: '#435548' }}>05 DEC</span>
+                        </div>
+                        <img src="/assets/controlled_t2_rgb.jpg" style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', display: 'block', border: '1px solid #435548' }} alt="T2 Structure" />
+                        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.62rem', fontWeight: 700, color: '#161513', marginTop: '0.35rem' }}>Built Structure</div>
+                        <div style={{ fontSize: '0.60rem', color: '#736C61', lineHeight: 1.3 }}>Erected concrete building footprint</div>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Draggable Interactive Wipe Slider with Target Reticle */}
-                <div
-                  className="ba-slider-container"
-                  style={{ '--ba-clip': `${sliderPos}%`, height: '380px' }}
-                  onMouseDown={() => { isDraggingSlider.current = true; }}
-                  onMouseUp={() => { isDraggingSlider.current = false; }}
-                  onMouseLeave={() => { isDraggingSlider.current = false; }}
-                  onMouseMove={handleSliderMouseMove}
-                >
-                  <img src="/assets/controlled_t0_rgb.jpg" className="ba-img-base" alt="Baseline T0 Before" />
-                  <img src="/assets/controlled_t2_rgb.jpg" className="ba-img-clipped" alt="Target T2 After" />
+                  {/* Draggable Interactive Wipe Slider with Target Reticle */}
                   <div
-                    style={{
-                      position: 'absolute',
-                      top: '48.8%',
-                      left: '19.5%',
-                      width: '29.3%',
-                      height: '29.3%',
-                      border: '2px solid #C5A869',
-                      boxShadow: '0 0 16px rgba(197, 168, 105, 0.45)',
-                      pointerEvents: 'none',
-                      zIndex: 3,
+                    className="ba-slider-container"
+                    style={{ '--ba-clip': `${sliderPos}%` }}
+                    onMouseDown={() => { isDraggingSlider.current = true; }}
+                    onMouseUp={() => { isDraggingSlider.current = false; }}
+                    onMouseLeave={() => { isDraggingSlider.current = false; }}
+                    onMouseMove={handleSliderMouseMove}
+                    onTouchStart={(e) => {
+                      isDraggingSlider.current = true;
+                      handleSliderTouchMove(e);
+                    }}
+                    onTouchEnd={() => { isDraggingSlider.current = false; }}
+                    onTouchCancel={() => { isDraggingSlider.current = false; }}
+                    onTouchMove={handleSliderTouchMove}
+                    onClick={(e) => {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      const p = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+                      setSliderPos(p);
                     }}
                   >
-                    <div style={{ position: 'absolute', top: -20, left: 0, background: 'rgba(18,17,16,0.92)', border: '1px solid #C5A869', padding: '1px 6px', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.58rem', color: '#C5A869', fontWeight: 700, whiteSpace: 'nowrap' }}>
-                      ⊙ 11.5% CHANGE FOOTPRINT
+                    <img src="/assets/controlled_t0_rgb.jpg" className="ba-img-base" alt="Baseline T0 Before" />
+                    <img src="/assets/controlled_t2_rgb.jpg" className="ba-img-clipped" alt="Target T2 After" />
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '48.8%',
+                        left: '19.5%',
+                        width: '29.3%',
+                        height: '29.3%',
+                        border: '2px solid #C5A869',
+                        boxShadow: '0 0 16px rgba(197, 168, 105, 0.45)',
+                        pointerEvents: 'none',
+                        zIndex: 3,
+                      }}
+                    >
+                      <div style={{ position: 'absolute', top: -20, left: 0, background: 'rgba(18,17,16,0.92)', border: '1px solid #C5A869', padding: '1px 6px', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.58rem', color: '#C5A869', fontWeight: 700, whiteSpace: 'nowrap' }}>
+                        ⊙ 11.5% CHANGE FOOTPRINT
+                      </div>
                     </div>
-                  </div>
-                  <div id="baDivider" style={{ position: 'absolute', top: 0, bottom: 0, left: `${sliderPos}%`, width: 2, backgroundColor: '#C5A869', zIndex: 4, pointerEvents: 'none' }}>
-                    <div style={{ position: 'absolute', top: '50%', left: -14, width: 28, height: 28, borderRadius: '50%', background: '#161513', border: '2px solid #C5A869', color: '#C5A869', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, transform: 'translateY(-50%)', fontWeight: 'bold' }}>
-                      ⇄
+                    <div id="baDivider" style={{ position: 'absolute', top: 0, bottom: 0, left: `${sliderPos}%`, width: 2, backgroundColor: '#C5A869', zIndex: 4, pointerEvents: 'none' }}>
+                      <div style={{ position: 'absolute', top: '50%', left: -22, width: 44, height: 44, borderRadius: '50%', background: '#161513', border: '2px solid #C5A869', color: '#C5A869', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, transform: 'translateY(-50%)', fontWeight: 'bold', boxShadow: '0 2px 10px rgba(0,0,0,0.6)' }}>
+                        ⇄
+                      </div>
                     </div>
+                    <div className="ba-badge-left">AFTER (T2 · DEVELOPED STRUCTURE)</div>
+                    <div className="ba-badge-right">BEFORE (T0 · BASELINE TERRAIN)</div>
                   </div>
-                  <div className="ba-badge-left">AFTER (T2 · DEVELOPED STRUCTURE)</div>
-                  <div className="ba-badge-right">BEFORE (T0 · BASELINE TERRAIN)</div>
                 </div>
               </div>
             </div>
@@ -841,224 +852,236 @@ export default function Home() {
 
           {/* 8. SECTION 08: PROGRESSIVE ANALYTICAL EVIDENCE */}
           <div className="section-dark-obsidian progressive-evidence-section" id="sec_evidence">
-            <div className="editorial-eyebrow">TERRAE / PROGRESSIVE EVIDENCE</div>
-            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.4rem', fontWeight: 500, color: '#FBF9F4', marginBottom: '0.5rem' }}>
-              What changed? And what proves that interpretation?
-            </div>
-            <p style={{ color: '#A0988A', fontSize: '1.0rem', maxWidth: '720px', marginBottom: '1.5rem' }}>
-              The satellite observation progressively gains physical and mathematical overlays — advancing through 6 verifiable stages from raw surface reflectance to an auditable decision.
-            </p>
-
-            <div className="evidence-console-container">
-              {/* Left Stage Viewport */}
-              <div>
-                <div className="evidence-stage-viewport">
-                  <img src={evidenceLayers[evidLayer].src} className="evidence-stage-img" alt="Evidence Layer" />
-                  <div className="evidence-stage-badge">
-                    {evidenceLayers[evidLayer].badge}
-                  </div>
-                  <div className="evidence-stage-legend">
-                    {evidenceLayers[evidLayer].legend}
-                  </div>
-
-                  {/* Central Reticle */}
-                  <div style={{ position: 'absolute', top: '38%', left: '35%', width: '28%', height: '28%', border: '1px dashed rgba(197, 168, 105, 0.45)', pointerEvents: 'none', zIndex: 4 }}>
-                    <div style={{ position: 'absolute', top: -18, left: 0, background: 'rgba(14,13,12,0.92)', border: '1px solid rgba(197,168,105,0.4)', padding: '1px 6px', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.56rem', color: '#C5A869', fontWeight: 700 }}>
-                      ⊙ TARGET CLUSTER · 28.5215° N, 77.4782° E
-                    </div>
-                  </div>
-
-                  {/* Translucent Intelligence HUD */}
-                  <div className="evidence-hud-overlay">
-                    <div className="evid-hud-item">
-                      <span className="evid-hud-lbl">01 / LOCATION OF DIVERGENCE</span>
-                      <span className="evid-hud-val">{evidenceLayers[evidLayer].loc}</span>
-                    </div>
-                    <div className="evid-hud-divider"></div>
-                    <div className="evid-hud-item">
-                      <span className="evid-hud-lbl">02 / PHYSICAL EVIDENCE</span>
-                      <span className="evid-hud-val">{evidenceLayers[evidLayer].evidence}</span>
-                    </div>
-                    <div className="evid-hud-divider"></div>
-                    <div className="evid-hud-item">
-                      <span className="evid-hud-lbl">03 / AUDITABLE DECISION</span>
-                      <span className="evid-hud-val" style={{ color: '#C5A869' }}>
-                        {evidenceLayers[evidLayer].verdict}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 3-Pillar Evidence Architecture Bar */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginTop: '0.85rem', fontFamily: "'JetBrains Mono', monospace" }}>
-                  <div style={{ background: '#141311', border: '1px solid #2A2722', borderTop: '2px solid #C5A869', padding: '0.75rem 0.85rem' }}>
-                    <div style={{ fontSize: '0.60rem', color: '#C5A869', letterSpacing: '0.14em', fontWeight: 700 }}>1. LOCATION OF DIVERGENCE</div>
-                    <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#FBF9F4', margin: '0.2rem 0' }}>2,542 Pixels (1.00%)</div>
-                    <div style={{ fontSize: '0.65rem', color: '#82796D', lineHeight: 1.3 }}>MGRS 43RGM · Localized agrarian parcels</div>
-                  </div>
-                  <div style={{ background: '#141311', border: '1px solid #2A2722', borderTop: '2px solid #55B374', padding: '0.75rem 0.85rem' }}>
-                    <div style={{ fontSize: '0.60rem', color: '#55B374', letterSpacing: '0.14em', fontWeight: 700 }}>2. PHYSICAL ATTRIBUTION</div>
-                    <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#FBF9F4', margin: '0.2rem 0' }}>ΔNIR -22.6% · ΔRed -12.6%</div>
-                    <div style={{ fontSize: '0.65rem', color: '#82796D', lineHeight: 1.3 }}>Chlorophyll absorption cycle, not concrete</div>
-                  </div>
-                  <div style={{ background: '#141311', border: '1px solid #2A2722', borderTop: '2px solid #9A7842', padding: '0.75rem 0.85rem' }}>
-                    <div style={{ fontSize: '0.60rem', color: '#C5A869', letterSpacing: '0.14em', fontWeight: 700 }}>3. AUDITABLE CONCLUSION</div>
-                    <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#C5A869', margin: '0.2rem 0' }}>⚠ REVIEW REQUIRED</div>
-                    <div style={{ fontSize: '0.65rem', color: '#82796D', lineHeight: 1.3 }}>Seasonal shift suppressed to prevent false alert</div>
-                  </div>
-                </div>
-
-                {/* Transport Strip */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#121110', border: '1px solid #2A2722', padding: '0.65rem 1rem', marginTop: '0.85rem', fontFamily: "'JetBrains Mono', monospace" }}>
-                  <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                    <button className="orbital-pill" onClick={() => setEvidLayer((prev) => (prev + 5) % 6)}>
-                      &lang; PREV LAYER
-                    </button>
-                    <button className="orbital-pill" onClick={() => setEvidLayer((prev) => (prev + 1) % 6)}>
-                      NEXT LAYER &rang;
-                    </button>
-                  </div>
-                  <div style={{ fontSize: '0.70rem', color: '#C5A869' }}>
-                    {evidenceLayers[evidLayer].readout}
-                  </div>
-                </div>
+            <div className="section-inner-container">
+              <div className="editorial-eyebrow">TERRAE / PROGRESSIVE EVIDENCE</div>
+              <div className="section-headline-light">
+                What changed? And what proves that interpretation?
               </div>
+              <p className="section-subhead-light">
+                The satellite observation progressively gains physical and mathematical overlays — advancing through 6 verifiable stages from raw surface reflectance to an auditable decision.
+              </p>
 
-              {/* Right Layer Cards */}
-              <div>
-                {evidenceLayers.map((l, lIdx) => (
-                  <div
-                    key={l.idx}
-                    className={`evidence-layer-card ${evidLayer === lIdx ? 'active-layer' : ''}`}
-                    onClick={() => setEvidLayer(lIdx)}
-                  >
-                    <div className="layer-idx">{l.idx} / {l.name}</div>
-                    <div className="layer-title">{l.title}</div>
-                    <div className="layer-desc">{l.desc}</div>
+              <div className="evidence-console-container">
+                {/* Left Stage Viewport */}
+                <div>
+                  <div className="evidence-stage-viewport">
+                    <img src={evidenceLayers[evidLayer].src} className="evidence-stage-img" alt="Evidence Layer" />
+                    <div className="evidence-stage-badge">
+                      {evidenceLayers[evidLayer].badge}
+                    </div>
+                    <div className="evidence-stage-legend">
+                      {evidenceLayers[evidLayer].legend}
+                    </div>
+
+                    {/* Central Reticle */}
+                    <div style={{ position: 'absolute', top: '38%', left: '35%', width: '28%', height: '28%', border: '1px dashed rgba(197, 168, 105, 0.45)', pointerEvents: 'none', zIndex: 4 }}>
+                      <div style={{ position: 'absolute', top: -18, left: 0, background: 'rgba(14,13,12,0.92)', border: '1px solid rgba(197,168,105,0.4)', padding: '1px 6px', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.56rem', color: '#C5A869', fontWeight: 700, whiteSpace: 'nowrap' }}>
+                        ⊙ TARGET CLUSTER · 28.5215° N, 77.4782° E
+                      </div>
+                    </div>
+
+                    {/* Translucent Intelligence HUD */}
+                    <div className="evidence-hud-overlay">
+                      <div className="evid-hud-item">
+                        <span className="evid-hud-lbl">01 / LOCATION OF DIVERGENCE</span>
+                        <span className="evid-hud-val">{evidenceLayers[evidLayer].loc}</span>
+                      </div>
+                      <div className="evid-hud-divider"></div>
+                      <div className="evid-hud-item">
+                        <span className="evid-hud-lbl">02 / PHYSICAL EVIDENCE</span>
+                        <span className="evid-hud-val">{evidenceLayers[evidLayer].evidence}</span>
+                      </div>
+                      <div className="evid-hud-divider"></div>
+                      <div className="evid-hud-item">
+                        <span className="evid-hud-lbl">03 / AUDITABLE DECISION</span>
+                        <span className="evid-hud-val" style={{ color: '#C5A869' }}>
+                          {evidenceLayers[evidLayer].verdict}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                ))}
+
+                  {/* 3-Pillar Evidence Architecture Bar */}
+                  <div className="evidence-pillars-grid">
+                    <div style={{ background: '#141311', border: '1px solid #2A2722', borderTop: '2px solid #C5A869', padding: '0.75rem 0.85rem' }}>
+                      <div style={{ fontSize: '0.60rem', color: '#C5A869', letterSpacing: '0.14em', fontWeight: 700 }}>1. LOCATION OF DIVERGENCE</div>
+                      <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#FBF9F4', margin: '0.2rem 0' }}>2,542 Pixels (1.00%)</div>
+                      <div style={{ fontSize: '0.65rem', color: '#82796D', lineHeight: 1.3 }}>MGRS 43RGM · Localized agrarian parcels</div>
+                    </div>
+                    <div style={{ background: '#141311', border: '1px solid #2A2722', borderTop: '2px solid #55B374', padding: '0.75rem 0.85rem' }}>
+                      <div style={{ fontSize: '0.60rem', color: '#55B374', letterSpacing: '0.14em', fontWeight: 700 }}>2. PHYSICAL ATTRIBUTION</div>
+                      <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#FBF9F4', margin: '0.2rem 0' }}>ΔNIR -22.6% · ΔRed -12.6%</div>
+                      <div style={{ fontSize: '0.65rem', color: '#82796D', lineHeight: 1.3 }}>Chlorophyll absorption cycle, not concrete</div>
+                    </div>
+                    <div style={{ background: '#141311', border: '1px solid #2A2722', borderTop: '2px solid #9A7842', padding: '0.75rem 0.85rem' }}>
+                      <div style={{ fontSize: '0.60rem', color: '#C5A869', letterSpacing: '0.14em', fontWeight: 700 }}>3. AUDITABLE CONCLUSION</div>
+                      <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#C5A869', margin: '0.2rem 0' }}>⚠ REVIEW REQUIRED</div>
+                      <div style={{ fontSize: '0.65rem', color: '#82796D', lineHeight: 1.3 }}>Seasonal shift suppressed to prevent false alert</div>
+                    </div>
+                  </div>
+
+                  {/* Transport Strip */}
+                  <div className="evidence-transport-strip">
+                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                      <button className="orbital-pill" onClick={() => setEvidLayer((prev) => (prev + 5) % 6)}>
+                        &lang; PREV LAYER
+                      </button>
+                      <button className="orbital-pill" onClick={() => setEvidLayer((prev) => (prev + 1) % 6)}>
+                        NEXT LAYER &rang;
+                      </button>
+                    </div>
+                    <div style={{ fontSize: '0.70rem', color: '#C5A869' }}>
+                      {evidenceLayers[evidLayer].readout}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Layer Cards */}
+                <div>
+                  {evidenceLayers.map((l, lIdx) => (
+                    <div
+                      key={l.idx}
+                      className={`evidence-layer-card ${evidLayer === lIdx ? 'active-layer' : ''}`}
+                      onClick={() => setEvidLayer(lIdx)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <div className="layer-idx">{l.idx} / {l.name}</div>
+                      <div className="layer-title">{l.title}</div>
+                      <div className="layer-desc">{l.desc}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
 
           {/* 9. SECTION 09: OBSERVATIONS MOSAIC */}
           <div className="section-dark-obsidian" id="sec_observations">
-            <div className="editorial-eyebrow">DIVERSE EARTH OBSERVATION REGIONS</div>
-            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.4rem', fontWeight: 500, color: '#FBF9F4', marginBottom: '0.5rem' }}>
-              Earth / Observations
-            </div>
-            <p style={{ color: '#A0988A', fontSize: '1.05rem', maxWidth: '680px', marginBottom: '2.5rem' }}>
-              Tested across diverse global geographies, terrain profiles, and sensor geometries — from dense coastal ports to agrarian plains.
-            </p>
+            <div className="section-inner-container">
+              <div className="editorial-eyebrow">DIVERSE EARTH OBSERVATION REGIONS</div>
+              <div className="section-headline-light">
+                Earth / Observations
+              </div>
+              <p className="section-subhead-light">
+                Tested across diverse global geographies, terrain profiles, and sensor geometries — from dense coastal ports to agrarian plains.
+              </p>
 
-            <div className="mosaic-grid-6">
-              {[
-                { tag: 'URBAN · COASTAL', title: 'Beirut Port & Waterfront', desc: 'Dense commercial infrastructure & coastal monitoring.', img: '/assets/beirut_t1_rgb.jpg' },
-                { tag: 'AGRICULTURE · PHENOLOGICAL', title: 'NCR Agrarian Plains', desc: 'Seasonal crop phenology & agricultural greening discrimination.', img: '/assets/sentinel2_t0_rgb.jpg' },
-                { tag: 'ESTUARY · FORESTRY', title: 'Bordeaux River Basin', desc: 'Riparian vegetation, river corridor shifts & vineyard expansion.', img: '/assets/bordeaux_t1_rgb.jpg' },
-                { tag: 'TROPICAL COASTAL METROPOLIS', title: 'Mumbai Peninsula', desc: 'Monsoon wetlands, port facilities & reclamation monitoring.', img: '/assets/mumbai_t1_rgb.jpg' },
-                { tag: 'SUBURBAN VALLEY', title: 'Cupertino Foothills', desc: 'Low-density commercial development & semi-arid vegetation.', img: '/assets/cupertino_t1_rgb.jpg' },
-                { tag: 'OPEN-PIT MINING', title: 'Aguas Claras Open-Pit', desc: 'Active mineral extraction, tailings ponds & slope grading.', img: '/assets/aguasclaras_t1_rgb.jpg' },
-              ].map((m) => (
-                <div className="mosaic-tile" key={m.title}>
-                  <img src={m.img} className="mosaic-img" alt={m.title} />
-                  <div className="mosaic-meta">
-                    <div className="mosaic-tag">{m.tag}</div>
-                    <div className="mosaic-title">{m.title}</div>
-                    <div className="mosaic-desc">{m.desc}</div>
+              <div className="mosaic-grid-6">
+                {[
+                  { tag: 'URBAN · COASTAL', title: 'Beirut Port & Waterfront', desc: 'Dense commercial infrastructure & coastal monitoring.', img: '/assets/beirut_t1_rgb.jpg' },
+                  { tag: 'AGRICULTURE · PHENOLOGICAL', title: 'NCR Agrarian Plains', desc: 'Seasonal crop phenology & agricultural greening discrimination.', img: '/assets/sentinel2_t0_rgb.jpg' },
+                  { tag: 'ESTUARY · FORESTRY', title: 'Bordeaux River Basin', desc: 'Riparian vegetation, river corridor shifts & vineyard expansion.', img: '/assets/bordeaux_t1_rgb.jpg' },
+                  { tag: 'TROPICAL COASTAL METROPOLIS', title: 'Mumbai Peninsula', desc: 'Monsoon wetlands, port facilities & reclamation monitoring.', img: '/assets/mumbai_t1_rgb.jpg' },
+                  { tag: 'SUBURBAN VALLEY', title: 'Cupertino Foothills', desc: 'Low-density commercial development & semi-arid vegetation.', img: '/assets/cupertino_t1_rgb.jpg' },
+                  { tag: 'OPEN-PIT MINING', title: 'Aguas Claras Open-Pit', desc: 'Active mineral extraction, tailings ponds & slope grading.', img: '/assets/aguasclaras_t1_rgb.jpg' },
+                ].map((m) => (
+                  <div className="mosaic-tile" key={m.title}>
+                    <img src={m.img} className="mosaic-img" alt={m.title} />
+                    <div className="mosaic-meta">
+                      <div className="mosaic-tag">{m.tag}</div>
+                      <div className="mosaic-title">{m.title}</div>
+                      <div className="mosaic-desc">{m.desc}</div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
 
           {/* 10. SECTION 10: VALIDATION BOARD */}
           <div className="section-warm-ivory" id="sec_validation">
-            <div className="editorial-eyebrow-dark">QUANTITATIVE BENCHMARK RESEARCH BOARD</div>
-            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.4rem', fontWeight: 500, color: '#161513', marginBottom: '0.5rem' }}>
-              OSCD 5-Pair Benchmark Validation
-            </div>
-            <p style={{ color: '#5A544A', fontSize: '1.05rem', maxWidth: '720px', marginBottom: '2.5rem' }}>
-              Evaluated across 5 geographically separated Sentinel-2 pairs from the Onera Satellite Change Detection dataset.
-            </p>
+            <div className="section-inner-container">
+              <div className="editorial-eyebrow-dark">QUANTITATIVE BENCHMARK RESEARCH BOARD</div>
+              <div className="section-headline-dark">
+                OSCD 5-Pair Benchmark Validation
+              </div>
+              <p className="section-subhead-dark">
+                Evaluated across 5 geographically separated Sentinel-2 pairs from the Onera Satellite Change Detection dataset.
+              </p>
 
-            <div className="oscd-grid-5">
-              {[
-                { city: 'BEIRUT', acc: '98.54%', pr: '12.4%', rec: '7.8%', f1: '0.096' },
-                { city: 'MUMBAI', acc: '98.88%', pr: '43.7%', rec: '22.9%', f1: '0.301' },
-                { city: 'BORDEAUX', acc: '98.24%', pr: '28.1%', rec: '18.4%', f1: '0.222' },
-                { city: 'CUPERTINO', acc: '95.69%', pr: '14.2%', rec: '11.5%', f1: '0.127' },
-                { city: 'AGUAS CLARAS', acc: '98.15%', pr: '35.4%', rec: '25.6%', f1: '0.297' },
-              ].map((c) => (
-                <div className="oscd-card" key={c.city}>
-                  <div className="oscd-city">{c.city}</div>
-                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.90rem', fontWeight: 700, color: '#161513', marginBottom: '0.5rem' }}>
-                    {c.acc} <span style={{ fontSize: '0.62rem', color: '#736C61', fontWeight: 400 }}>ACC</span>
+              <div className="oscd-grid-5">
+                {[
+                  { city: 'BEIRUT', acc: '98.54%', pr: '12.4%', rec: '7.8%', f1: '0.096' },
+                  { city: 'MUMBAI', acc: '98.88%', pr: '43.7%', rec: '22.9%', f1: '0.301' },
+                  { city: 'BORDEAUX', acc: '98.24%', pr: '28.1%', rec: '18.4%', f1: '0.222' },
+                  { city: 'CUPERTINO', acc: '95.69%', pr: '14.2%', rec: '11.5%', f1: '0.127' },
+                  { city: 'AGUAS CLARAS', acc: '98.15%', pr: '35.4%', rec: '25.6%', f1: '0.297' },
+                ].map((c) => (
+                  <div className="oscd-card" key={c.city}>
+                    <div className="oscd-city">{c.city}</div>
+                    <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.90rem', fontWeight: 700, color: '#161513', marginBottom: '0.5rem' }}>
+                      {c.acc} <span style={{ fontSize: '0.62rem', color: '#736C61', fontWeight: 400 }}>ACC</span>
+                    </div>
+                    <div style={{ fontSize: '0.65rem', color: '#736C61', fontFamily: "'JetBrains Mono', monospace", lineHeight: 1.4 }}>
+                      Precision: {c.pr}<br />
+                      Recall: {c.rec}<br />
+                      F1-Score: {c.f1}
+                    </div>
                   </div>
-                  <div style={{ fontSize: '0.65rem', color: '#736C61', fontFamily: "'JetBrains Mono', monospace", lineHeight: 1.4 }}>
-                    Precision: {c.pr}<br />
-                    Recall: {c.rec}<br />
-                    F1-Score: {c.f1}
-                  </div>
+                ))}
+              </div>
+
+              <div className="cs-data-strip" style={{ marginTop: '2rem' }}>
+                <div>
+                  <div className="cs-metric-lbl">MACRO ACCURACY</div>
+                  <div className="cs-metric-val">97.90%</div>
                 </div>
-              ))}
-            </div>
-
-            <div className="cs-data-strip" style={{ marginTop: '2rem' }}>
-              <div>
-                <div className="cs-metric-lbl">MACRO ACCURACY</div>
-                <div className="cs-metric-val">97.90%</div>
-              </div>
-              <div>
-                <div className="cs-metric-lbl">MICRO ACCURACY</div>
-                <div className="cs-metric-val">97.70%</div>
-              </div>
-              <div>
-                <div className="cs-metric-lbl">TEST PAIRS</div>
-                <div className="cs-metric-val">5 CITIES</div>
-              </div>
-              <div>
-                <div className="cs-metric-lbl">DIVERGENCE THRESHOLD</div>
-                <div className="cs-metric-val">τ = 0.15</div>
+                <div>
+                  <div className="cs-metric-lbl">MICRO ACCURACY</div>
+                  <div className="cs-metric-val">97.70%</div>
+                </div>
+                <div>
+                  <div className="cs-metric-lbl">TEST PAIRS</div>
+                  <div className="cs-metric-val">5 CITIES</div>
+                </div>
+                <div>
+                  <div className="cs-metric-lbl">DIVERGENCE THRESHOLD</div>
+                  <div className="cs-metric-val">τ = 0.15</div>
+                </div>
               </div>
             </div>
           </div>
 
           {/* 11. SECTION 11: WORKSTATION BANNER */}
           <div className="section-warm-stone" style={{ padding: '3.5rem 0' }}>
-            <div style={{ maxWidth: '1160px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
-              <div>
-                <div className="editorial-eyebrow-dark">OPERATIONAL WORKBENCH</div>
-                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.2rem', fontWeight: 600, color: '#161513' }}>
-                  Ready to investigate an area?
+            <div className="section-inner-container">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
+                <div>
+                  <div className="editorial-eyebrow-dark">OPERATIONAL WORKBENCH</div>
+                  <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.2rem', fontWeight: 600, color: '#161513' }}>
+                    Ready to investigate an area?
+                  </div>
+                  <p style={{ color: '#454038', fontSize: '0.95rem', margin: '0.5rem 0 0 0' }}>
+                    Launch the interactive analyst console with full trajectory tables and cryptographic provenance.
+                  </p>
                 </div>
-                <p style={{ color: '#454038', fontSize: '0.95rem', margin: '0.5rem 0 0 0' }}>
-                  Launch the interactive analyst console with full trajectory tables and cryptographic provenance.
-                </p>
+                <button
+                  onClick={() => {
+                    setAppMode('workstation');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  style={{
+                    background: '#B89A62',
+                    color: '#121110',
+                    border: '1px solid #C5A869',
+                    padding: '0.85rem 1.75rem',
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontSize: '0.82rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    minHeight: '44px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  OPEN THE WORKSTATION →
+                </button>
               </div>
-              <button
-                onClick={() => {
-                  setAppMode('workstation');
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                style={{
-                  background: '#B89A62',
-                  color: '#121110',
-                  border: '1px solid #C5A869',
-                  padding: '0.85rem 1.75rem',
-                  fontFamily: "'JetBrains Mono', monospace",
-                  fontSize: '0.82rem',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                }}
-              >
-                OPEN THE WORKSTATION →
-              </button>
             </div>
           </div>
 
           {/* FOOTER */}
-          <div style={{ padding: '3rem 2rem', borderTop: '1px solid #2A2722', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.68rem', color: '#82796D', maxWidth: '1280px', margin: '0 auto' }}>
+          <div style={{ padding: '3rem 2rem', borderTop: '1px solid #2A2722', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.68rem', color: '#82796D', maxWidth: '1280px', margin: '0 auto' }}>
             <div>
               <span style={{ fontWeight: 700, color: '#C5A869', letterSpacing: '0.16em' }}>TERRAE</span> · EARTH INTELLIGENCE · SATELLITE INVESTIGATION CONSOLE
             </div>
@@ -1095,7 +1118,7 @@ export default function Home() {
           </div>
 
           {/* Case Study Switcher */}
-          <div style={{ display: 'flex', gap: '1rem', margin: '1.5rem 0' }}>
+          <div className="ws-case-switcher">
             <button
               onClick={() => setActiveCaseIdx(1)}
               style={{
@@ -1108,6 +1131,7 @@ export default function Home() {
                 fontSize: '0.75rem',
                 fontWeight: 700,
                 cursor: 'pointer',
+                minHeight: '44px',
               }}
             >
               TERRAE / CASE 01: CONTROLLED (11.5% CHANGE)
@@ -1124,6 +1148,7 @@ export default function Home() {
                 fontSize: '0.75rem',
                 fontWeight: 700,
                 cursor: 'pointer',
+                minHeight: '44px',
               }}
             >
               TERRAE / CASE 02: REAL SENTINEL-2 (43RGM)
@@ -1142,14 +1167,26 @@ export default function Home() {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '7fr 5fr', gap: '2rem', marginBottom: '1.5rem' }}>
+              <div className="ws-case-grid">
                 {/* Visual Stage */}
                 <div>
-                  <div style={{ position: 'relative', width: '100%', height: '460px', background: '#070908', border: '1px solid #2A2722', overflow: 'hidden', boxShadow: '0 16px 40px rgba(0,0,0,0.6)' }}>
-                    <img src="/assets/controlled_t2_rgb.jpg" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} alt="Target T2" />
-                    <div style={{ position: 'absolute', top: '48.8%', left: '19.5%', width: '29.3%', height: '29.3%', border: '2px solid #C5A869', boxShadow: '0 0 20px rgba(197, 168, 105, 0.45)', pointerEvents: 'none' }}>
-                      <div style={{ position: 'absolute', top: -24, left: 0, background: '#121110', border: '1px solid #C5A869', padding: '2px 8px', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.62rem', color: '#C5A869', fontWeight: 700, whiteSpace: 'nowrap' }}>
-                        ⊙ NEW BUILT STRUCTURE · 11.5% FOOTPRINT
+                  <div style={{ position: 'relative', width: '100%', height: '380px', background: '#070908', border: '1px solid #2A2722', overflow: 'hidden', boxShadow: '0 16px 40px rgba(0,0,0,0.6)' }}>
+                    <img src="/assets/controlled_t2_rgb.jpg" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} alt="Controlled T2" />
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '48.8%',
+                        left: '19.5%',
+                        width: '29.3%',
+                        height: '29.3%',
+                        border: '2px solid #55B374',
+                        boxShadow: '0 0 20px rgba(85, 179, 116, 0.5)',
+                        pointerEvents: 'none',
+                        zIndex: 3,
+                      }}
+                    >
+                      <div style={{ position: 'absolute', top: -20, left: 0, background: 'rgba(18,17,16,0.92)', border: '1px solid #55B374', padding: '1px 6px', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.58rem', color: '#55B374', fontWeight: 700 }}>
+                        ✔ 11.5% DIVERGENT REGION
                       </div>
                     </div>
                     <div style={{ position: 'absolute', top: 12, left: 14, background: 'rgba(18,17,16,0.9)', border: '1px solid rgba(197,168,105,0.4)', padding: '0.35rem 0.65rem', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.64rem', color: '#C5A869' }}>
@@ -1161,7 +1198,7 @@ export default function Home() {
                   </div>
 
                   {/* Synchronized 3-Tile Micro-Strip */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginTop: '0.85rem' }}>
+                  <div className="ws-micro-strip-grid">
                     <div style={{ background: '#0E0D0C', border: '1px solid #2A2722', padding: '0.4rem' }}>
                       <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.58rem', color: '#82796D', marginBottom: '0.25rem' }}>01 · T0 BASELINE (NATURAL)</div>
                       <img src="/assets/controlled_t0_rgb.jpg" style={{ width: '100%', height: '95px', objectFit: 'contain', background: '#070908' }} alt="T0" />
@@ -1220,7 +1257,7 @@ export default function Home() {
               </div>
 
               {/* 3-Date Horizon Track */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem', marginBottom: '1.5rem' }}>
+              <div className="ws-horizon-grid">
                 <div style={{ background: '#121110', border: '1px solid #2A2722', padding: '0.85rem', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', fontFamily: "'JetBrains Mono', monospace" }}>
                     <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#C5A869' }}>01 · T0: 19 MAY 2023</span>
@@ -1254,7 +1291,7 @@ export default function Home() {
               </div>
 
               {/* Viewport + Evidence Pipeline */}
-              <div style={{ display: 'grid', gridTemplateColumns: '7fr 5fr', gap: '2rem', marginBottom: '1.5rem' }}>
+              <div className="ws-case-grid">
                 <div style={{ position: 'relative', width: '100%', height: '380px', background: '#070908', border: '1px solid #2A2722', overflow: 'hidden', boxShadow: '0 16px 40px rgba(0,0,0,0.6)' }}>
                   <img src="/assets/evidence_02_mask.jpg" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} alt="Case 02 Mask" />
                   <div style={{ position: 'absolute', top: 12, left: 14, background: 'rgba(18,17,16,0.9)', border: '1px solid rgba(197,168,105,0.4)', padding: '0.35rem 0.65rem', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.64rem', color: '#C5A869' }}>
