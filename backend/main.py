@@ -19,7 +19,8 @@ import logging
 from pathlib import Path
 from typing import List, Optional, Dict, Any
 
-from fastapi import FastAPI, HTTPException, Query, status
+from fastapi import FastAPI, HTTPException, Query, status, Request
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -202,6 +203,197 @@ def serialize_analysis_result(res):
 # -----------------------------------------------------------------------------
 # API ROUTES
 # -----------------------------------------------------------------------------
+@app.get("/")
+def root_endpoint(request: Request):
+    """
+    Root endpoint for TERRAE backend service.
+    Renders branded developer overview for browser requests or JSON for API clients.
+    """
+    accept = request.headers.get("accept", "")
+    if "text/html" not in accept:
+        return JSONResponse(content={
+            "app": "TERRAE",
+            "title": "TERRAE — Earth Intelligence API",
+            "status": "online",
+            "version": "1.0.0",
+            "endpoints": {
+                "docs": "/docs",
+                "redoc": "/redoc",
+                "health": "/health",
+                "api_status": "/api/status",
+                "search": "POST /api/search",
+                "analyze": "POST /api/analyze",
+                "cases_controlled": "/api/cases/controlled",
+                "cases_real_s2": "/api/cases/real-sentinel2",
+                "evidence_layers": "/api/evidence/layers"
+            },
+            "frontend": "https://frontend-seven-lac-65.vercel.app"
+        })
+
+    html_content = """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TERRAE — Earth Intelligence API</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0a0908;
+      color: #edeae2;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 820px;
+      width: 100%;
+      background: rgba(22, 20, 18, 0.75);
+      border: 1px solid rgba(197, 168, 105, 0.25);
+      border-radius: 12px;
+      padding: 2.5rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(197, 168, 105, 0.12);
+      border: 1px solid rgba(197, 168, 105, 0.35);
+      color: #c5a869;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      margin-bottom: 1.25rem;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: #34d399;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #34d399;
+    }
+    h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: #f7f4ec;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.35rem;
+    }
+    .tagline {
+      color: #9a9486;
+      font-size: 1rem;
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(197, 168, 105, 0.15);
+      border-radius: 8px;
+      padding: 1.25rem;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .card:hover {
+      border-color: #c5a869;
+      background: rgba(197, 168, 105, 0.08);
+      transform: translateY(-2px);
+    }
+    .card-title {
+      font-weight: 600;
+      color: #f7f4ec;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card-desc {
+      font-size: 0.8rem;
+      color: #8c867a;
+      line-height: 1.4;
+    }
+    .footer {
+      border-top: 1px solid rgba(197, 168, 105, 0.15);
+      padding-top: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: #6d675e;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .footer a {
+      color: #c5a869;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="badge">
+      <div class="dot"></div>
+      Backend Operational · HTTP 200
+    </div>
+    <h1>TERRAE</h1>
+    <p class="tagline">Earth Intelligence · Satellite Investigation Console API</p>
+    
+    <div class="grid">
+      <a href="https://frontend-seven-lac-65.vercel.app" class="card" style="border-color: rgba(197,168,105,0.45); background: rgba(197,168,105,0.08);">
+        <div class="card-title">🖥️ Web Console</div>
+        <div class="card-desc">Interactive Next.js Vercel frontend for multi-spectral analysis & editorial view.</div>
+      </a>
+      <a href="/docs" class="card">
+        <div class="card-title">📘 Swagger UI Docs</div>
+        <div class="card-desc">Interactive OpenAPI documentation to execute live endpoints in-browser.</div>
+      </a>
+      <a href="/redoc" class="card">
+        <div class="card-title">📕 ReDoc Reference</div>
+        <div class="card-desc">Comprehensive clean REST API schemas and request/response specifications.</div>
+      </a>
+      <a href="/health" class="card">
+        <div class="card-title">💚 Health Probe</div>
+        <div class="card-desc">Real-time health telemetry endpoint for uptime monitoring and automated probes.</div>
+      </a>
+      <a href="/api/status" class="card">
+        <div class="card-title">⚡ Pipeline Status</div>
+        <div class="card-desc">View FAISS index vectors, RemoteCLIP provider, and attribution configs.</div>
+      </a>
+      <a href="https://github.com/PhantomCipher13/terrae-geospatial-intelligence" class="card" target="_blank">
+        <div class="card-title">🐙 GitHub Repository</div>
+        <div class="card-desc">Source code repository with unit test suites, models, and deployment configs.</div>
+      </a>
+    </div>
+
+    <div class="footer">
+      <div>TERRAE · SIH26227</div>
+      <div>Render Service: <span style="color:#c5a869;">terrae-backend</span></div>
+    </div>
+  </div>
+</body>
+</html>"""
+    return HTMLResponse(content=html_content, status_code=200)
+
 @app.get("/health", status_code=status.HTTP_200_OK)
 def health_check():
     """Render and deployment health probe."""
