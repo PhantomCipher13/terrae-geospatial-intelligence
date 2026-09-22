@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || '';
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://terrae-backend.onrender.com';
 
 export default function Home() {
   const [appMode, setAppMode] = useState('website'); // 'website' | 'workstation'
