@@ -1,10 +1,11 @@
-# SIH26227 Technical Report: Semantic Retrieval and Multi-Temporal Change Analysis of Satellite Imagery
+# SIH26227 Technical Report: TERRAE — Semantic Retrieval and Multi-Temporal Change Analysis of Satellite Imagery
 
 ---
 
 ## 1. PROBLEM STATEMENT
 
 ### 1.1 Official Identification & Governance
+- **Project Name**: TERRAE — Earth Intelligence Satellite Investigation Console
 - **Problem Statement ID**: SIH26227
 - **Problem Statement Title**: Semantic Retrieval and Multi-Temporal Change Analysis of Satellite Imagery
 - **Organization**: Ministry of Defence / Indian Army — Directorate General of Information Systems (DGIS)
@@ -16,7 +17,7 @@
 Military and defense geospatial analysts monitor vast, continuous streams of Earth observation data acquired across diverse satellite constellations. Operational intelligence teams face five fundamental bottlenecks when attempting to detect and attribute terrain changes:
 
 1. **Semantic Retrieval of Satellite Imagery**: Satellite archives are cataloged predominantly by geographic coordinates, acquisition timestamps, and cloud-cover percentages. Analysts cannot query imagery using human domain vocabulary (e.g., *"new construction and buildings"*, *"cleared airfields"*, *"water body expansion"*). This forces analysts into time-consuming manual browsing across thousands of candidate tiles.
-2. **Multi-Temporal Analysis Beyond Naive Differencing**: Operational change detection traditionally relies on two-date ($T_0 \to T_1$) image subtraction. Two-date differencing is fundamentally vulnerable to false positives caused by ephemeral seasonal phenology, agricultural crop harvesting, illumination shifts, and cloud shadows. Robust operational monitoring requires multi-temporal ($\ge 3$ observation epochs) trajectory analysis to distinguish persistent physical land transformation from transient or cyclical variations.
+2. **Multi-Temporal Analysis Beyond Naive Differencing**: Operational change detection traditionally relies on two-date ($T_0 \to T_1$) image subtraction. Two-date differencing is fundamentally vulnerable to false positives caused by ephemeral seasonal phenology, agricultural crop harvesting, illumination shifts, and cloud shadows. Robust operational monitoring requires multi-temporal ($\ge 3$ observation epochs) trajectory analysis to distinguish persistent physical land transformation from transient or seasonal variations.
 3. **Multi-Spectral Analysis & Physical Attribution**: Pure change magnitude maps indicate *that* a change occurred, but cannot indicate *what* changed. Effective decision support requires decomposing multi-band spectral responses—such as visible reflectance (Blue, Green, Red), Near-Infrared (NIR), Normalized Difference Vegetation Index (NDVI), and Normalized Difference Water Index (NDWI)—into candidate physical change signatures.
 4. **Heterogeneous Satellite Datasets**: Operational imagery originates from heterogeneous sensor platforms (e.g., ESA Sentinel-2 MSI, commercial high-resolution optical, SAR). Varying spatial resolutions, band arrangements, radiometric calibrations, and coordinate reference systems (CRS) hinder standardized analytical processing.
 5. **Secure, Offline Operation Requirements**: Defense and intelligence environments require processing classified or sensitive operational data within air-gapped workstations without external network access, remote cloud APIs, or third-party tracking.
@@ -25,10 +26,10 @@ Military and defense geospatial analysts monitor vast, continuous streams of Ear
 
 ## 2. SOLUTION
 
-### 2.1 Project Overview: GEOAI — Satellite Investigation Console
-**GEOAI** is an evidence-based Earth Intelligence satellite investigation console designed specifically to resolve problem statement SIH26227. 
+### 2.1 Project Overview: TERRAE — Earth Intelligence Satellite Investigation Console
+**TERRAE** is an evidence-based Earth Intelligence satellite investigation console designed specifically to resolve problem statement SIH26227.
 
-In simple language: **GEOAI is not merely a two-image change detector.** Standard change detectors output an uncalibrated, noisy black-and-white mask of altered pixels without context. In contrast, GEOAI is an interactive decision-support system that guides an analyst from a natural-language intent through semantic discovery, multi-band physical evidence extraction, multi-date trajectory persistence testing, and an auditable, conservative verdict.
+In simple language: **TERRAE is not merely a two-image change detector.** Standard change detectors output an uncalibrated, noisy black-and-white mask of altered pixels without context. In contrast, TERRAE is an interactive decision-support system that guides an analyst from a natural-language intent through semantic discovery, multi-band physical evidence extraction, multi-date trajectory persistence testing, and an auditable, conservative verdict.
 
 ```
 ASK ────────► DISCOVER ────────► COMPARE ────────► EXPLAIN ────────► CHALLENGE ────────► DECIDE
@@ -45,27 +46,27 @@ The system structures every satellite investigation through a rigorous six-stage
 2. **DISCOVER (Semantic Retrieval)**: A vision-language foundation model tailored for remote sensing (RemoteCLIP) projects the query into a 512-dimensional joint embedding space. A local vector index performs exact cosine-similarity matching against satellite tile embeddings, retrieving the most semantically relevant satellite scene and region of interest.
 3. **COMPARE (Temporal Matching & Spectral Differencing)**: The system queries local metadata to identify co-registered historical and intermediate observations covering the identical geographic bounding box. It applies multi-band spectral differencing across matched observations at a calibrated threshold ($\tau = 0.15$), isolating contiguous changed pixel clusters.
 4. **EXPLAIN (Evidence-Based Change Attribution)**: Rather than reporting raw changed pixels, the system analyzes the directional shifts across Blue, Green, Red, and NIR bands alongside spectral indices (NDVI, NDWI). It computes **Attribution Support** scores across mutually exclusive candidate signatures (e.g., Built-Surface vs. Vegetation Dynamics vs. Water).
-5. **CHALLENGE (Temporal Evidence & Trajectory Persistence)**: To prevent seasonal and ephemeral false alarms, the system ingests three or more chronological observation dates ($T_0 \to T_{\text{mid}} \to T_1$). It tracks pixel-level spectral trajectories across time to evaluate whether the detected change is permanent or reversible.
+5. **CHALLENGE (Temporal Evidence & Trajectory Persistence)**: To examine whether detected changes reflect lasting ground transformation or temporary fluctuation, the system ingests three or more chronological observation dates ($T_0 \to T_{\text{mid}} \to T_1$). It tracks pixel-level spectral trajectories across time to evaluate whether the detected change is persistent, transient, late-onset, or reversible.
 6. **DECIDE (Conservative Decision Layer)**: The system evaluates multi-pillar evidence (spectral magnitude, spatial coherence, attribution support, and temporal persistence) against deterministic decision criteria. It issues one of three explicit, auditable verdicts:
    - **`SUPPORTED`**: Evidence strongly aligns with the query intent, exceeds change thresholds, demonstrates spatial coherence, and exhibits sustained temporal persistence.
-   - **`REVIEW`**: Sub-threshold, diffuse, or ambiguous evidence detected; the system conservatively routes the case to human analyst inspection rather than generating false alarms.
+   - **`REVIEW`**: Sub-threshold, diffuse, or ambiguous evidence detected; the system conservatively routes the case to human analyst inspection rather than forcing an automatic affirmative decision.
    - **`ABSTAIN`**: Deficient inputs (e.g., excessive cloud cover, failed co-registration, or fewer than two observations); the system refrains from guessing.
 
 ### 2.3 Terminology & Scientific Boundary Disclaimer
-To maintain absolute scientific rigor, GEOAI strictly adheres to clear operational terminology:
+To maintain absolute scientific rigor, TERRAE strictly adheres to clear operational terminology:
 - **Evidence-Based Change Attribution**: The rule-based decomposition of spectral and spatial shifts into candidate ground-cover interpretations.
 - **Attribution Support**: Relative heuristic evidence points allocated to candidate change signatures.
 - **Temporal Evidence**: The multi-date trajectory classification of pixels across time.
 
 > [!IMPORTANT]
-> **Attribution scores represent heuristic support for candidate change signatures, not calibrated probabilities or causal estimates.** The system does not claim causal inference or Bayesian posteriors; it provides traceable physical evidence to assist qualified human analysts.
+> **Attribution scores represent heuristic support for candidate change signatures, not calibrated probabilities or causal estimates.** The system does not claim causal conclusions or Bayesian posteriors; it provides traceable physical evidence to assist qualified human analysts.
 
 ---
 
 ## 3. TECHNICAL APPROACH / METHODOLOGY & PROCESS OF IMPLEMENTATION
 
 ### 3.1 System Architecture
-GEOAI is organized into modular, decoupled Python components within the `geoai` package, exposing both an offline Streamlit analysis workstation and a FastAPI REST backend.
+TERRAE is organized into modular, decoupled Python components within the core `geoai` analytical package, exposing both an offline Streamlit analysis workstation and a FastAPI REST backend.
 
 ```mermaid
 flowchart TD
@@ -102,7 +103,6 @@ flowchart TD
 
     subgraph Decision ["Audit & Decision Layer"]
         DEC["geoai.core.result\nChangeVerdict (SUPPORTED / REVIEW / ABSTAIN)"]
-        PROV["geoai.provenance\nCryptographic SHA-256 Audit Record"]
     end
 
     Q --> QP
@@ -119,8 +119,7 @@ flowchart TD
     ATTR --> DEC
     COH --> DEC
     PERS --> DEC
-    DEC --> PROV
-    PROV --> WS
+    DEC --> WS
 ```
 
 ### 3.2 Semantic Retrieval Engine
@@ -174,7 +173,7 @@ The attribution engine calculates standardized spectral indices to track physica
    where $\epsilon = 10^{-6}$ prevents numerical division by zero.
 
 ### 3.6 Evidence-Based Change Attribution
-When pixels change ($f_{\text{change}} > 0$), GEOAI computes heuristic **Attribution Support** scores across six candidate change signatures:
+When pixels change ($f_{\text{change}} > 0$), TERRAE computes heuristic **Attribution Support** scores across six candidate change signatures:
 
 | Candidate Signature | Physical & Spectral Criteria |
 | :--- | :--- |
@@ -182,20 +181,20 @@ When pixels change ($f_{\text{change}} > 0$), GEOAI computes heuristic **Attribu
 | **`VEGETATION_CHANGE`** | Vegetation greening / regeneration: increase in NIR ($\Delta\text{NIR} > 0.05$), decrease in Red ($\Delta\text{Red} < -0.02$), and increase in NDVI ($\Delta\text{NDVI} > 0.08$). |
 | **`WATER_CHANGE`** | Expansion of standing water: strong absorption in NIR and Red (end-state $\text{NIR} < 0.18$, $\text{Red} < 0.15$) and positive NDWI shift ($\Delta\text{NDWI} > 0.10$). |
 | **`SEASONAL`** | Moderate NDVI shift ($0.03 \le |\Delta\text{NDVI}| \le 0.25$) without severe structural Red disruption ($|\Delta\text{Red}| < 0.08$) and diffuse spatial footprint ($C < 0.5$). |
-| **`ARTIFACT`** | Abrupt, uniform shift across all four bands simultaneously ($\text{mean}(|\Delta B|) > 0.20, \text{std}(\Delta B) < 0.04$), indicating cloud boundary, shadow, or sensor calibration anomaly. |
+| **`ARTIFACT`** | Abrupt, uniform shift across all four bands simultaneously ($\text{mean}(|\Delta B|) > 0.2, \text{std}(\Delta B) < 0.04$), indicating cloud boundary, shadow, or sensor calibration anomaly. |
 | **`UNCERTAIN`** | Residual support allocated when spectral signatures conflict or remain unresolved. |
 
 Scores are normalized such that $\sum_{k} \text{Support}(k) = 1.0$. If the highest candidate support exceeds $0.30$, it is assigned as the dominant interpretation; otherwise, the case is assigned to `UNCERTAIN`.
 
 ### 3.7 Spatial Coherence Analysis
-To distinguish real ground structures from salt-and-pepper noise, GEOAI evaluates spatial continuity via connected-component labeling (`scipy.ndimage.label`):
+To distinguish real ground structures from salt-and-pepper noise, TERRAE evaluates spatial continuity via connected-component labeling (`scipy.ndimage.label`):
 $$\text{Spatial Coherence } C_{\text{spatial}} = \frac{\text{size of largest 8-connected changed component}}{\text{total changed pixels}}$$
 - **High Coherence ($C_{\text{spatial}} \to 1.0$)**: Indicates a single compact, contiguous change region (typical of construction, clearing, or building development).
 - **Low Coherence ($C_{\text{spatial}} \to 0.0$)**: Indicates diffuse, isolated pixel noise across the scene.
 - *Note*: Spatial coherence is a geometric morphological ratio, **not a probability**.
 
 ### 3.8 Multi-Temporal Persistence Analysis
-To challenge two-date conclusions, GEOAI analyzes multi-temporal trajectories across three chronological observations: $T_0$ (baseline), $T_{\text{mid}}$ (intermediate), and $T_1$ (monitoring).
+To challenge two-date conclusions, TERRAE analyzes multi-temporal trajectories across three chronological observations: $T_0$ (baseline), $T_{\text{mid}}$ (intermediate), and $T_1$ (monitoring).
 
 The system partitions all valid pixels into **five Mutually Exclusive & Collectively Exhaustive (MECE)** canonical categories ($\sum_{k=1}^5 C_k = |V|$):
 
@@ -235,7 +234,7 @@ The decision engine (`geoai.core.result.ChangeVerdict`) integrates multi-pillar 
 ---
 
 ### 3.10 Real Sentinel-2 Validation Case
-The complete pipeline was evaluated against real Sentinel-2A Level-2A multi-spectral rasters over the National Capital Region (NCR), India.
+The complete pipeline was evaluated against real Sentinel-2A Level-2A multi-spectral rasters over the National Capital Region (NCR), India. Earth-observation imagery is derived from local GeoTIFF data; the controlled Case 01 benchmark is synthetic.
 
 - **Scene Metadata**:
   - Location: Greater Noida / NCR, India
@@ -283,7 +282,7 @@ The complete pipeline was evaluated against real Sentinel-2A Level-2A multi-spec
 To validate spatial coherence and multi-temporal trajectory classification under mathematically known, noise-free ground truth, the repository includes a controlled synthetic test suite (`scripts/demo_attribution.py`, Case A):
 
 - **Purpose**: Validates spatial clustering and trajectory partitioning without atmospheric interference.
-- **Nature of Case**: **Strictly synthetic benchmark** (not real satellite imagery).
+- **Nature of Case**: **Strictly synthetic benchmark** (Earth-observation imagery is derived from local GeoTIFF data; the controlled Case 01 benchmark is synthetic).
 - **Verified Benchmark Results**:
   - Total Changed Fraction: **$11.5\%$** ($7,549\text{ pixels}$)
   - Spatial Coherence: **$99.7\%$** ($24\text{ connected components}$)
@@ -345,12 +344,12 @@ The spectral change detector was evaluated against external labeled ground truth
 
 #### Class Imbalance & Metric Interpretation
 > [!WARNING]
-> **Pixel Accuracy ($97.70\%$ micro / $97.90\%$ macro) is NOT the headline metric.** Because change detection is subject to extreme class imbalance (only $2.36\%$ of pixels are changed in the ground truth), a trivial dummy classifier predicting $100\%$ unchanged pixels achieves $97.64\%$ accuracy. The scientifically informative metrics are Precision ($57.55\%$), Recall ($9.72\%$), F1 ($0.1663$), and IoU ($0.0907$). The low recall demonstrates that the fixed $\tau=0.15$ threshold operates conservatively, filtering subtle spectral shifts to prevent false alarms rather than capturing every minor change.
+> **Pixel Accuracy ($97.70\%$ micro / $97.90\%$ macro) is NOT the headline metric.** Because change detection is subject to extreme class imbalance (only $2.36\%$ of pixels are changed in the ground truth), a trivial dummy classifier predicting $100\%$ unchanged pixels achieves $97.64\%$ accuracy. The scientifically informative metrics are Precision ($57.55\%$), Recall ($9.72\%$), F1 ($0.1663$), and IoU ($0.0907$). The low recall demonstrates that the fixed $\tau=0.15$ threshold operates conservatively, filtering subtle spectral shifts rather than capturing every minor change.
 
 ---
 
 ### 3.13 Offline / Air-Gapped Architecture
-GEOAI is designed from first principles for air-gapped deployment:
+TERRAE is designed from first principles for air-gapped deployment:
 
 - **Local Model Storage**: Foundation model weights reside locally at `models/local/RemoteCLIP-ViT-B-32.pt`.
 - **Local Index & Database**: FAISS flat index stored at `data/faiss_index/`; SQLite database at `data/metadata.db`.
@@ -385,13 +384,13 @@ The repository maintains an automated test suite executed via `pytest tests/ -q`
 
 ### 4.1 Technical Feasibility
 - **Local Workstation Execution**: The system requires no specialized high-performance computing clusters. RemoteCLIP ViT-B-32 ($605\text{ MB}$) and FAISS CPU execute comfortably within $8\text{ GB}$ to $16\text{ GB}$ of RAM on standard x86-64 workstations.
-- **Standard Geospatial Formats**: Uses native GDAL/Rasterio bindings for standard OGC-compliant formats: GeoTIFF, Cloud-Optimized GeoTIFF (COG), and standard ESA SAFE structures.
+- **Standard Geospatial Formats**: Uses native GDAL/Rasterio bindings for standard GeoTIFF-based satellite data and multi-band raster formats.
 - **Deterministic Analytical Pipeline**: Once imagery is embedded, the spectral differencing, spatial coherence, and MECE trajectory algorithms execute deterministically without stochastic variation.
 
 ### 4.2 Operational Feasibility
 - **Air-Gapped Compliance**: The entire pipeline operates with zero external network connectivity, fully meeting military security guidelines for classified enclave operation.
 - **Analyst Workstation Model**: Designed as an analyst-in-the-loop decision-support tool. It automates repetitive spatial catalog searches and presents transparent, decomposed evidence chains rather than opaque black-box verdicts.
-- **Reproducibility**: Every query, bounding box, algorithm threshold ($\tau = 0.15$), and intermediate array is recorded with a cryptographic SHA-256 hash in the provenance trail.
+- **Reproducibility**: The analytical pipeline is fully deterministic; all detection parameters ($\tau = 0.15$), observation timestamps, spatial windows, and evidence metrics are recorded in structured dataclasses (`TemporalChangeResult`, `AttributionResult`), ensuring repeatable verification without stochastic drift.
 
 ### 4.3 Scalability Analysis (Architectural Potential)
 - **Vector Index Scalability**: While the current deployment uses FAISS `IndexFlatIP` (exact brute-force search on small collections), the index backend interface (`geoai.providers.index.base.IndexBackend`) supports swapping to `IndexIVFFlat` or `IndexHNSWFlat` for million-tile collections without altering pipeline logic.
@@ -404,9 +403,9 @@ The repository maintains an automated test suite executed via `pytest tests/ -q`
 
 ### 5.1 Measurable Operational Benefits
 1. **Accelerated Semantic Scene Discovery**: Analysts locate relevant satellite scenes by describing physical intent in plain language rather than manually querying coordinate bounding boxes or filtering metadata spreadsheets.
-2. **Elimination of Common False Alarms**: Three-date temporal trajectory analysis explicitly detects and separates reversible seasonal phenology (e.g., dry vs. monsoon vegetation cycles) from true permanent construction.
+2. **Multi-Temporal Trajectory Disambiguation**: Multi-temporal persistence analysis provides additional evidence for distinguishing transient or reversible variation from persistent change (e.g., distinguishing seasonal vegetation cycles from lasting construction).
 3. **Evidence Traceability & Decomposed Attribution**: Changes are broken down into measurable spectral shifts ($\Delta\text{NIR}, \Delta\text{Red}, \Delta\text{NDVI}, \Delta\text{NDWI}$) and spatial clustering ratios, giving analysts clear physical evidence.
-4. **Conservative Decision Support**: By routing sub-threshold or ambiguous cases to `REVIEW` instead of forcing a binary change decision, the system prevents false alarms in high-stakes operational environments.
+4. **Conservative Decision Support**: By routing sub-threshold or ambiguous cases to `REVIEW` instead of forcing an automated affirmative change decision, the system preserves human oversight in high-stakes operational environments.
 5. **Secure Tactical Deployment**: Zero external API dependencies ensure complete operational sovereignty within restricted command networks.
 
 ---
@@ -444,7 +443,7 @@ To maintain complete scientific integrity, the following operational and algorit
 2. **Conservative Sensitivity & Low Benchmark Recall**: On the OSCD 5-pair validation subset, the detector achieved $9.72\%$ recall alongside $57.55\%$ precision. It is designed as a conservative change candidate filter, not a high-recall segmentation network.
 3. **Limited Benchmark Subset**: OSCD evaluation was conducted strictly on a 5-pair subset ($3,025,938\text{ pixels}$), not the complete 24-pair OSCD dataset.
 4. **Heuristic Attribution Support**: Attribution scores are heuristic rule-based support weights derived from physical indices. They are **not calibrated Bayesian probabilities** and **not causal proofs**.
-5. **Synthetic Controlled Case**: Case A in the attribution demo is a synthetic benchmark designed to test spatial clustering logic; it must not be cited as real Earth observation imagery.
+5. **Synthetic Controlled Case**: Case A in the attribution demo is a synthetic benchmark designed to test spatial clustering logic; Earth-observation imagery is derived from local GeoTIFF data; the controlled Case 01 benchmark is synthetic.
 6. **No Universal Generalization Claim**: Performance demonstrated on Sentinel-2 MGRS `43RGM` (NCR India) and the OSCD 5-pair subset does not constitute a guarantee of universal generalization across all sensor platforms or cloud-heavy geographies.
 
 ---
