@@ -1906,3 +1906,980 @@ div[data-testid="stTextInput"] input:focus {
         font-size: 0.55rem !important;
     }
 }
+
+/* ============================================================
+   CHAPTER SECTION SEPARATION & VISUAL RHYTHM
+   ============================================================ */
+.section-chapter {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    padding: 6rem 3.5vw !important;
+    position: relative !important;
+    scroll-margin-top: 75px !important;
+}
+
+.section-philosophy {
+    background-color: #F9F7F2 !important;
+    color: #141311 !important;
+    border-top: 1px solid #D8D0C2 !important;
+    border-bottom: 1px solid #D8D0C2 !important;
+}
+
+.section-philosophy .philosophy-principles-row {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 1.5rem !important;
+    border-top: 1px solid #D8D0C2 !important;
+    padding-top: 1.5rem !important;
+}
+
+.principle-box {
+    background: rgba(0, 0, 0, 0.02) !important;
+    border-left: 2px solid #C5A869 !important;
+    padding-left: 0.85rem !important;
+}
+
+.principle-note {
+    font-size: 0.65rem !important;
+    color: #787168 !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    margin-top: 0.35rem !important;
+}
+
+.philosophy-img-container {
+    width: 100% !important;
+    aspect-ratio: 1 / 1 !important;
+    max-height: 420px !important;
+    overflow: hidden !important;
+    background: #0E0D0C !important;
+}
+
+.philosophy-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    transition: transform 0.4s ease !important;
+}
+
+.philosophy-card-stage:hover .philosophy-img {
+    transform: scale(1.02) !important;
+}
+
+.philosophy-card-caption {
+    padding: 0.85rem 1.1rem !important;
+    background: #F4F0E8 !important;
+    border-top: 1px solid #D8D0C2 !important;
+    font-size: 0.72rem !important;
+    color: #454038 !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    line-height: 1.4 !important;
+}
+
+/* --- EXPLICIT SECTION BREAK DIVIDER (PHILOSOPHY -> METHOD) --- */
+.section-chapter-break {
+    width: 100% !important;
+    background: #0A0F18 !important;
+    padding: 2.25rem 3.5vw !important;
+    border-top: 2px solid #C5A869 !important;
+    border-bottom: 1px solid #1E293B !important;
+    box-sizing: border-box !important;
+}
+
+.chapter-break-inner {
+    max-width: 1280px !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 1.5rem !important;
+}
+
+.chapter-break-line {
+    flex: 1 !important;
+    height: 1px !important;
+    background: linear-gradient(90deg, transparent, rgba(197, 168, 105, 0.4), transparent) !important;
+}
+
+.chapter-break-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.65rem !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.22em !important;
+    font-weight: 700 !important;
+    color: #C5A869 !important;
+    background: rgba(197, 168, 105, 0.08) !important;
+    border: 1px solid rgba(197, 168, 105, 0.3) !important;
+    padding: 0.45rem 1.25rem !important;
+    border-radius: 2px !important;
+    white-space: nowrap !important;
+}
+
+.chapter-break-dot {
+    width: 6px !important;
+    height: 6px !important;
+    border-radius: 50% !important;
+    background: #00D2FF !important;
+    box-shadow: 0 0 8px #00D2FF !important;
+}
+
+/* --- METHOD SECTION (IMAGE-LED INVESTIGATION SEQUENCE) --- */
+.section-method {
+    background-color: #0C1017 !important;
+    color: #FBF9F4 !important;
+    border-top: 1px solid #1E293B !important;
+    border-bottom: 1px solid #1E293B !important;
+}
+
+.method-image-led-workspace {
+    margin-top: 2.5rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.75rem !important;
+}
+
+.method-step-nav-bar {
+    display: flex !important;
+    gap: 0.75rem !important;
+    overflow-x: auto !important;
+    padding-bottom: 0.5rem !important;
+    scrollbar-width: thin !important;
+}
+
+.method-nav-pill {
+    flex: 1 !important;
+    min-width: 140px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.65rem !important;
+    background: #121824 !important;
+    border: 1px solid #233146 !important;
+    color: #94A3B8 !important;
+    padding: 0.75rem 1rem !important;
+    cursor: pointer !important;
+    transition: all 0.25s ease !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    min-height: 48px !important;
+    border-radius: 2px !important;
+}
+
+.method-nav-pill:hover {
+    border-color: #00D2FF !important;
+    color: #FBF9F4 !important;
+    background: #172234 !important;
+}
+
+.method-nav-pill.active {
+    background: #17263C !important;
+    border-color: #00D2FF !important;
+    color: #00D2FF !important;
+    box-shadow: 0 0 16px rgba(0, 210, 255, 0.25) !important;
+}
+
+.pill-step-num {
+    font-weight: 800 !important;
+    font-size: 0.82rem !important;
+}
+
+.pill-step-name {
+    font-size: 0.75rem !important;
+    letter-spacing: 0.12em !important;
+}
+
+/* 2-Column Stage Layout: >= 55% Visual, <= 45% Info */
+.method-stage-grid {
+    display: grid !important;
+    grid-template-columns: 58% 42% !important;
+    gap: 2rem !important;
+    align-items: stretch !important;
+}
+
+.method-cockpit-plate {
+    background: #080C12 !important;
+    border: 1px solid #233146 !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    cursor: pointer !important;
+    transition: border-color 0.3s ease !important;
+}
+
+.method-cockpit-plate:hover {
+    border-color: #00D2FF !important;
+}
+
+.cockpit-plate-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 0.75rem 1.25rem !important;
+    background: #0F1622 !important;
+    border-bottom: 1px solid #233146 !important;
+    font-family: 'JetBrains Mono', monospace !important;
+}
+
+.cockpit-badge {
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    color: #00D2FF !important;
+    letter-spacing: 0.12em !important;
+}
+
+.cockpit-inspect-hint {
+    font-size: 0.62rem !important;
+    color: #94A3B8 !important;
+    letter-spacing: 0.1em !important;
+}
+
+.cockpit-img-frame {
+    width: 100% !important;
+    flex: 1 !important;
+    min-height: 380px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #05070A !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.cockpit-plate-img {
+    max-width: 100% !important;
+    max-height: 480px !important;
+    width: auto !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+    object-fit: contain !important;
+    display: block !important;
+    margin: 0 auto !important;
+    transition: transform 0.3s ease !important;
+}
+
+.method-cockpit-plate:hover .cockpit-plate-img {
+    transform: scale(1.015) !important;
+}
+
+.cockpit-plate-footer {
+    padding: 0.85rem 1.25rem !important;
+    background: #0B111A !important;
+    border-top: 1px solid #233146 !important;
+    font-family: 'JetBrains Mono', monospace !important;
+}
+
+.cockpit-overlay-title {
+    color: #00D2FF !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.25rem !important;
+}
+
+.cockpit-overlay-meta {
+    color: #8A99AD !important;
+    font-size: 0.68rem !important;
+    line-height: 1.4 !important;
+}
+
+.active-step-dossier-card {
+    background: #111722 !important;
+    border: 1px solid #233146 !important;
+    border-left: 3px solid #00D2FF !important;
+    padding: 1.75rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    height: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.dossier-eyebrow {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 0.68rem !important;
+    letter-spacing: 0.20em !important;
+    color: #00D2FF !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.dossier-title {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 1.7rem !important;
+    color: #FBF9F4 !important;
+    font-weight: 600 !important;
+    line-height: 1.25 !important;
+    margin: 0 0 0.85rem 0 !important;
+}
+
+.dossier-sub {
+    font-size: 0.92rem !important;
+    color: #94A3B8 !important;
+    line-height: 1.6 !important;
+    margin: 0 0 1.25rem 0 !important;
+}
+
+.dossier-evidence-box {
+    background: #0B1017 !important;
+    border: 1px solid #1E293B !important;
+    padding: 1rem 1.15rem !important;
+    margin-bottom: 1.25rem !important;
+}
+
+.dossier-box-header {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 0.62rem !important;
+    color: #C5A869 !important;
+    letter-spacing: 0.16em !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.35rem !important;
+}
+
+.dossier-box-content {
+    font-size: 0.85rem !important;
+    color: #FBF9F4 !important;
+    line-height: 1.5 !important;
+}
+
+.dossier-spec-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 0.85rem !important;
+    margin-bottom: 1.5rem !important;
+}
+
+.dossier-spec-item {
+    background: #0D131C !important;
+    border-left: 2px solid #C5A869 !important;
+    padding: 0.6rem 0.85rem !important;
+}
+
+.spec-lbl {
+    display: block !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 0.58rem !important;
+    color: #8A99AD !important;
+    letter-spacing: 0.14em !important;
+    font-weight: 700 !important;
+}
+
+.spec-val {
+    display: block !important;
+    font-size: 0.78rem !important;
+    color: #E2E8F0 !important;
+    margin-top: 0.2rem !important;
+    line-height: 1.4 !important;
+}
+
+.dossier-action-bar {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    border-top: 1px solid #1E293B !important;
+    padding-top: 1rem !important;
+    margin-top: auto !important;
+}
+
+.dossier-btn {
+    background: #172234 !important;
+    color: #FBF9F4 !important;
+    border: 1px solid #2A3B54 !important;
+    padding: 0.55rem 1.1rem !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 0.70rem !important;
+    letter-spacing: 0.10em !important;
+    cursor: pointer !important;
+    min-height: 44px !important;
+    transition: all 0.2s ease !important;
+}
+
+.dossier-btn:hover {
+    border-color: #00D2FF !important;
+    color: #00D2FF !important;
+}
+
+.dossier-btn.primary {
+    background: #0084A8 !important;
+    color: #FFFFFF !important;
+    border: 1px solid #00D2FF !important;
+    font-weight: 700 !important;
+}
+
+.dossier-btn.primary:hover {
+    background: #0099C4 !important;
+}
+
+.dossier-counter {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 0.70rem !important;
+    color: #8A99AD !important;
+    font-weight: 700 !important;
+}
+
+/* --- TEMPORAL SECTION --- */
+.section-temporal {
+    background-color: #0B120E !important;
+    color: #FBF9F4 !important;
+    border-top: 1px solid #1C2920 !important;
+    border-bottom: 1px solid #1C2920 !important;
+}
+
+.temporal-panel-card {
+    background: #111713 !important;
+    border: 1px solid #1E2E23 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.temporal-panel-card:hover {
+    border-color: #55B374 !important;
+    transform: translateY(-2px) !important;
+}
+
+.temporal-panel-card.active-temporal {
+    border-color: #C5A869 !important;
+    box-shadow: 0 0 24px rgba(197, 168, 105, 0.3) !important;
+}
+
+.temporal-card-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 0.75rem 1rem !important;
+    border-bottom: 1px solid #1E2E23 !important;
+    font-family: 'JetBrains Mono', monospace !important;
+}
+
+.temporal-card-date {
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    color: #C5A869 !important;
+}
+
+.temporal-card-phase {
+    font-size: 0.60rem !important;
+    color: #A3B5A6 !important;
+}
+
+.temporal-img-frame {
+    width: 100% !important;
+    aspect-ratio: 1 / 1 !important;
+    background: #070908 !important;
+    overflow: hidden !important;
+}
+
+.temporal-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    display: block !important;
+}
+
+.temporal-card-footer {
+    padding: 0.85rem 1rem !important;
+    border-top: 1px solid #1E2E23 !important;
+    font-family: 'JetBrains Mono', monospace !important;
+}
+
+.temporal-card-stats {
+    font-size: 0.68rem !important;
+    color: #55B374 !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.2rem !important;
+}
+
+.temporal-card-desc {
+    font-size: 0.62rem !important;
+    color: #8B9E90 !important;
+}
+
+/* --- MOTION SECTION --- */
+.section-motion {
+    background-color: #070809 !important;
+    border-top: 1px solid #1F2228 !important;
+    border-bottom: 1px solid #1F2228 !important;
+}
+
+/* --- CASE 01 SECTION --- */
+.section-case01 {
+    background-color: #EDE8DE !important;
+    color: #161513 !important;
+    border-top: 1px solid #D9D1C4 !important;
+    border-bottom: 1px solid #D9D1C4 !important;
+}
+
+/* --- EVIDENCE SECTION --- */
+.section-evidence {
+    background-color: #0D0F14 !important;
+    color: #FBF9F4 !important;
+    border-top: 1px solid #222938 !important;
+    border-bottom: 1px solid #222938 !important;
+}
+
+/* --- OBSERVATIONS SECTION --- */
+.section-observations {
+    background-color: #11141A !important;
+    color: #FBF9F4 !important;
+    border-top: 1px solid #232A38 !important;
+    border-bottom: 1px solid #232A38 !important;
+}
+
+/* --- VALIDATION SECTION --- */
+.section-validation {
+    background-color: #F7F4EC !important;
+    color: #141311 !important;
+    border-top: 1px solid #D8D0C2 !important;
+    border-bottom: 1px solid #D8D0C2 !important;
+}
+
+.oscd-visual-scenes-strip {
+    margin: 2rem 0 !important;
+}
+
+.scenes-strip-title {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 0.68rem !important;
+    letter-spacing: 0.18em !important;
+    color: #82796D !important;
+    font-weight: 700 !important;
+    margin-bottom: 1rem !important;
+    text-transform: uppercase !important;
+}
+
+.oscd-scenes-grid {
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 1rem !important;
+}
+
+.oscd-scene-card {
+    background: #FFFFFF !important;
+    border: 1px solid #D8D0C2 !important;
+    cursor: pointer !important;
+    transition: all 0.25s ease !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04) !important;
+}
+
+.oscd-scene-card:hover {
+    border-color: #C5A869 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important;
+}
+
+.oscd-scene-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 0.6rem 0.75rem !important;
+    border-bottom: 1px solid #EAE3D6 !important;
+    font-family: 'JetBrains Mono', monospace !important;
+}
+
+.oscd-scene-city {
+    font-size: 0.68rem !important;
+    font-weight: 800 !important;
+    color: #161513 !important;
+}
+
+.oscd-scene-acc {
+    font-size: 0.60rem !important;
+    font-weight: 700 !important;
+    color: #435548 !important;
+}
+
+.oscd-scene-img-frame {
+    width: 100% !important;
+    aspect-ratio: 1 / 1 !important;
+    background: #0E0D0C !important;
+    overflow: hidden !important;
+}
+
+.oscd-scene-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+}
+
+.oscd-scene-body {
+    padding: 0.65rem 0.75rem !important;
+    font-family: 'JetBrains Mono', monospace !important;
+}
+
+.oscd-scene-context {
+    font-size: 0.60rem !important;
+    color: #736C61 !important;
+    margin-bottom: 0.35rem !important;
+    line-height: 1.3 !important;
+}
+
+.oscd-scene-metrics-row {
+    display: flex !important;
+    justify-content: space-between !important;
+    font-size: 0.58rem !important;
+    color: #161513 !important;
+    font-weight: 700 !important;
+    border-top: 1px solid #EAE3D6 !important;
+    padding-top: 0.35rem !important;
+}
+
+/* Imbalance Banner */
+.oscd-imbalance-banner {
+    background: #FFFDF9 !important;
+    border: 1px solid #C5A869 !important;
+    border-left: 4px solid #C5A869 !important;
+    padding: 1.25rem 1.5rem !important;
+    margin: 2rem 0 1.5rem 0 !important;
+    box-shadow: 0 4px 16px rgba(197, 168, 105, 0.12) !important;
+}
+
+.imbalance-banner-top {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+    font-family: 'JetBrains Mono', monospace !important;
+}
+
+.imbalance-tag {
+    font-size: 0.65rem !important;
+    color: #9A7842 !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.14em !important;
+}
+
+.imbalance-fixed {
+    font-size: 0.62rem !important;
+    color: #736C61 !important;
+}
+
+.imbalance-headline {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 1.25rem !important;
+    color: #161513 !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.imbalance-body {
+    font-size: 0.85rem !important;
+    color: #454038 !important;
+    line-height: 1.55 !important;
+    margin: 0 !important;
+}
+
+/* Metrics Matrix */
+.oscd-metrics-matrix {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+}
+
+.matrix-column {
+    background: #FFFFFF !important;
+    border: 1px solid #D8D0C2 !important;
+    padding: 1.25rem !important;
+}
+
+.matrix-col-header {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 0.68rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.14em !important;
+    color: #9A7842 !important;
+    border-bottom: 1px solid #D8D0C2 !important;
+    padding-bottom: 0.5rem !important;
+    margin-bottom: 0.85rem !important;
+}
+
+.matrix-row {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 0.45rem 0 !important;
+    border-bottom: 1px solid #F0ECE4 !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 0.78rem !important;
+}
+
+.m-label {
+    color: #5A544A !important;
+}
+
+.m-val {
+    color: #161513 !important;
+    font-weight: 700 !important;
+}
+
+/* Progress Bars */
+.oscd-bars-container {
+    background: #FFFFFF !important;
+    border: 1px solid #D8D0C2 !important;
+    padding: 1.25rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1rem !important;
+}
+
+.bar-item {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.35rem !important;
+}
+
+.bar-label-row {
+    display: flex !important;
+    justify-content: space-between !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 0.68rem !important;
+    color: #454038 !important;
+    font-weight: 600 !important;
+}
+
+.bar-track {
+    width: 100% !important;
+    height: 8px !important;
+    background: #EAE3D6 !important;
+    border-radius: 4px !important;
+    overflow: hidden !important;
+}
+
+.bar-fill {
+    height: 100% !important;
+    border-radius: 4px !important;
+    transition: width 0.6s ease !important;
+}
+
+/* --- WORKSTATION BANNER --- */
+.section-ws-banner {
+    background: #111722 !important;
+    border-top: 1px solid #233146 !important;
+    border-bottom: 1px solid #233146 !important;
+    padding: 4rem 3.5vw !important;
+}
+
+.ws-launch-btn {
+    background: #B89A62 !important;
+    color: #121110 !important;
+    border: 1px solid #C5A869 !important;
+    padding: 0.95rem 2rem !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    min-height: 48px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    transition: all 0.25s ease !important;
+    box-shadow: 0 4px 16px rgba(184, 154, 98, 0.25) !important;
+}
+
+.ws-launch-btn:hover {
+    background: #C5A869 !important;
+    transform: translateY(-1px) !important;
+}
+
+/* ============================================================
+   IMAGE VIEWER / DETAIL INSPECTION LIGHTBOX MODAL
+   ============================================================ */
+.terrae-lightbox-backdrop {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: rgba(8, 10, 14, 0.92) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    z-index: 9999999 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 2rem !important;
+    box-sizing: border-box !important;
+}
+
+.terrae-lightbox-container {
+    background: #0E131C !important;
+    border: 1px solid #2A3B54 !important;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8) !important;
+    max-width: 900px !important;
+    width: 100% !important;
+    max-height: 90vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    border-radius: 4px !important;
+    overflow: hidden !important;
+    animation: fadeInModal 0.25s ease !important;
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; transform: scale(0.97); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.lightbox-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 1rem 1.5rem !important;
+    background: #141B28 !important;
+    border-bottom: 1px solid #2A3B54 !important;
+}
+
+.lightbox-title {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 1.15rem !important;
+    color: #FBF9F4 !important;
+    font-weight: 700 !important;
+}
+
+.lightbox-meta {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 0.65rem !important;
+    color: #00D2FF !important;
+    margin-top: 0.2rem !important;
+}
+
+.lightbox-close-btn {
+    background: #1E2838 !important;
+    color: #FBF9F4 !important;
+    border: 1px solid #3A4C68 !important;
+    padding: 0.4rem 0.85rem !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    border-radius: 2px !important;
+    transition: all 0.2s ease !important;
+    min-height: 40px !important;
+}
+
+.lightbox-close-btn:hover {
+    background: #EF4444 !important;
+    border-color: #EF4444 !important;
+    color: #FFFFFF !important;
+}
+
+.lightbox-image-stage {
+    padding: 1rem !important;
+    background: #06080C !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: auto !important;
+    max-height: 60vh !important;
+}
+
+.lightbox-img {
+    max-width: 100% !important;
+    max-height: 58vh !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+    display: block !important;
+    border: 1px solid #1E2838 !important;
+}
+
+.lightbox-footer {
+    padding: 0.85rem 1.5rem !important;
+    background: #111722 !important;
+    border-top: 1px solid #2A3B54 !important;
+    font-family: 'JetBrains Mono', monospace !important;
+}
+
+.lightbox-desc {
+    font-size: 0.78rem !important;
+    color: #E2E8F0 !important;
+    line-height: 1.4 !important;
+    margin-bottom: 0.35rem !important;
+}
+
+.lightbox-subnote {
+    font-size: 0.60rem !important;
+    color: #8A99AD !important;
+}
+
+/* ============================================================
+   RESPONSIVE ENHANCEMENTS FOR CHAPTERS & MOBILE TRUTH
+   ============================================================ */
+@media (max-width: 1024px) {
+    .method-stage-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+    .oscd-scenes-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-chapter {
+        padding: 3.5rem 1.25rem !important;
+    }
+    .section-philosophy .philosophy-principles-row {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+    .chapter-break-badge {
+        font-size: 0.60rem !important;
+        white-space: normal !important;
+        text-align: center !important;
+    }
+    .method-stage-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .method-cockpit-plate .cockpit-img-frame {
+        min-height: 280px !important;
+    }
+    .cockpit-plate-img {
+        max-height: 320px !important;
+    }
+    .temporal-story-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.25rem !important;
+    }
+    .oscd-scenes-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+    .oscd-metrics-matrix {
+        grid-template-columns: 1fr !important;
+    }
+    .ws-horizon-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .oscd-scenes-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .method-step-nav-bar {
+        gap: 0.4rem !important;
+    }
+    .method-nav-pill {
+        min-width: 110px !important;
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.68rem !important;
+    }
+    .dossier-action-bar {
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+    }
+    .dossier-btn {
+        width: 100% !important;
+    }
+    .terrae-lightbox-backdrop {
+        padding: 0.75rem !important;
+    }
+}
