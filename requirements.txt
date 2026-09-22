@@ -1,4 +1,4 @@
-﻿# GeoAI Workstation — Requirements
+# GeoAI Workstation — Requirements
 # Python 3.11 (Windows x64)
 # Install: C:\Python311\python.exe -m pip install -r requirements.txt
 # All packages must be available offline after initial install.
@@ -36,4 +36,9 @@ pytest>=8.0.0,<10.0
 # huggingface_hub>=1.0.0      # Already installed — for pre-staging models
 # transformers>=4.40.0        # For GeoRSCLIP (alternative provider)
 
+# ── Web / REST API & UI ───────────────────────────────────────────────
+fastapi>=0.110.0,<1.0.0
+uvicorn[standard]>=0.28.0,<1.0.0
+python-multipart>=0.0.9
 streamlit>=1.30.0
+

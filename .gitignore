@@ -47,3 +47,14 @@ temp_chrome_profile/
 scratch/
 logs/
 *.log
+
+# --- Node & Frontend --------------------------------------------------------
+node_modules/
+**/node_modules/
+.next/
+**/.next/
+out/
+**/out/
+.env.local
+.env.*.local
+

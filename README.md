@@ -63,6 +63,21 @@ C:\Python311\python.exe scripts/benchmark_oscd.py
 $env:HF_HUB_OFFLINE="1"; $env:TRANSFORMERS_OFFLINE="1"; C:\Python311\python.exe scripts/offline_test.py
 ```
 
+### Production Web Service (Render FastAPI Backend)
+```powershell
+uvicorn backend.main:app --host 0.0.0.0 --port 8000
+```
+
+### Production Web Frontend (Next.js / Vercel)
+```powershell
+cd frontend
+npm run dev
+# or for production build
+npm run build && npm run start
+```
+Configure `NEXT_PUBLIC_API_BASE_URL` in `frontend/.env.local` or Vercel Environment Variables to point to the deployed Render backend URL.
+
+
 ---
 
 ## 4. Current Status & Verification
