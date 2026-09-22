@@ -19,14 +19,14 @@ def check(step, condition, detail=""):
     if not condition:
         sys.exit(1)
 
-banner("GeoAI Offline Verification Test")
+banner("TERRAE Offline Verification Test")
 print(f"  HF_HUB_OFFLINE     = {os.environ.get('HF_HUB_OFFLINE','not set')}")
 print(f"  TRANSFORMERS_OFFLINE = {os.environ.get('TRANSFORMERS_OFFLINE','not set')}")
 print()
 
 # 1. Model loading
 print("[1] Application startup + model loading...")
-from geoai.app_factory import _load_config, build_embedding_provider
+from terrae.app_factory import _load_config, build_embedding_provider
 t0 = time.time()
 cfg = _load_config("configs/config.yaml")
 embedder = build_embedding_provider(cfg)
@@ -57,7 +57,7 @@ print(f"  Time: {i_ms:.1f} ms")
 
 # 4. FAISS search
 print("\n[4] FAISS search...")
-from geoai.providers.index.faiss_flat import FaissFlat
+from terrae.providers.index.faiss_flat import FaissFlat
 idx = FaissFlat(512)
 idx.load("data/faiss_index")
 check("Index loaded", idx.total_vectors > 0, f"{idx.total_vectors} vectors")
@@ -69,7 +69,7 @@ print(f"  Time: {s_ms:.2f} ms")
 
 # 5. Metadata lookup
 print("\n[5] Metadata lookup...")
-from geoai.db.metadata_db import MetadataDB
+from terrae.db.metadata_db import MetadataDB
 from pathlib import Path
 db = MetadataDB(Path(cfg["storage"]["db_path"]))
 tile_id, score = results[0]
@@ -79,7 +79,7 @@ check("Acquisition date present", meta.get("acquisition_date") is not None, str(
 
 # 6. E2E retrieval engine
 print("\n[6] End-to-end retrieval engine...")
-from geoai.retrieval.engine import RetrievalEngine
+from terrae.retrieval.engine import RetrievalEngine
 engine = RetrievalEngine(embedder, idx, db)
 t0 = time.time()
 retrieval_results = engine.search_text("dense forest", top_k=4)

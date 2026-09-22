@@ -33,27 +33,27 @@ Ingest time: ~0.2s | Query time: <100ms | Network calls: ZERO
 
 | Module | File | Notes |
 |--------|------|-------|
-| Raster validator | `geoai/ingest/validator.py` | CRS missing = warn not fail; bad file = fail |
-| Raster metadata reader | `geoai/ingest/reader.py` | CRS, transform, bounds, band names, date, sensor, nodata, hash |
-| Tile generator | `geoai/ingest/tiler.py` | Windowed reads, nodata detection, WGS84 bounds, coverage |
-| Ingest pipeline | `geoai/ingest/pipeline.py` | Deduplicate, quality gate, adapt, embed, index, batch DB insert |
-| Optical sensor adapter | `geoai/providers/sensors/optical.py` | uint8/uint16 normalisation; RGB by band name |
-| SAR sensor adapter | `geoai/providers/sensors/sar.py` | log10 dB — NOT optical normalisation |
-| Generic raster adapter | `geoai/providers/sensors/generic.py` | Fallback with explicit warning |
-| Sensor registry | `geoai/providers/sensors/registry.py` | Keyword dispatch; Sentinel-1/2/Landsat/etc |
-| FAISS Flat index | `geoai/providers/index/faiss_flat.py` | IndexFlatIP + string tile_id mapping, save/load |
-| SQLite metadata DB | `geoai/db/metadata_db.py` | scenes, tiles, embeddings, provenance tables |
-| Retrieval engine | `geoai/retrieval/engine.py` | Model-agnostic; logs provenance; fetches source_path from scene |
-| Query planner | `geoai/planner/query_planner.py` | Intent classification; per-stage flags; skips expensive stages |
-| App factory | `geoai/app_factory.py` | Single DI point; config-driven provider selection |
+| Raster validator | `terrae/ingest/validator.py` | CRS missing = warn not fail; bad file = fail |
+| Raster metadata reader | `terrae/ingest/reader.py` | CRS, transform, bounds, band names, date, sensor, nodata, hash |
+| Tile generator | `terrae/ingest/tiler.py` | Windowed reads, nodata detection, WGS84 bounds, coverage |
+| Ingest pipeline | `terrae/ingest/pipeline.py` | Deduplicate, quality gate, adapt, embed, index, batch DB insert |
+| Optical sensor adapter | `terrae/providers/sensors/optical.py` | uint8/uint16 normalisation; RGB by band name |
+| SAR sensor adapter | `terrae/providers/sensors/sar.py` | log10 dB — NOT optical normalisation |
+| Generic raster adapter | `terrae/providers/sensors/generic.py` | Fallback with explicit warning |
+| Sensor registry | `terrae/providers/sensors/registry.py` | Keyword dispatch; Sentinel-1/2/Landsat/etc |
+| FAISS Flat index | `terrae/providers/index/faiss_flat.py` | IndexFlatIP + string tile_id mapping, save/load |
+| SQLite metadata DB | `terrae/db/metadata_db.py` | scenes, tiles, embeddings, provenance tables |
+| Retrieval engine | `terrae/retrieval/engine.py` | Model-agnostic; logs provenance; fetches source_path from scene |
+| Query planner | `terrae/planner/query_planner.py` | Intent classification; per-stage flags; skips expensive stages |
+| App factory | `terrae/app_factory.py` | Single DI point; config-driven provider selection |
 | Config | `configs/config.yaml` | All paths, tile sizes, provider names — no hardcoded machine paths |
-| Core data models | `geoai/core/` | RasterMetadata, BandInfo, TileRecord, QualityReport, RegistrationResult, AnalysisPlan, ChangeVerdict |
+| Core data models | `terrae/core/` | RasterMetadata, BandInfo, TileRecord, QualityReport, RegistrationResult, AnalysisPlan, ChangeVerdict |
 
 ### MOCK / PLACEHOLDER
 
 | Component | File | Why mock | What's needed |
 |-----------|------|----------|---------------|
-| Image embeddings | `geoai/providers/embeddings/mock_provider.py` | RemoteCLIP weights not locally staged | Download ~350MB from HuggingFace |
+| Image embeddings | `terrae/providers/embeddings/mock_provider.py` | RemoteCLIP weights not locally staged | Download ~350MB from HuggingFace |
 | Text embeddings | same | same | same |
 
 `is_mock = True` property is set. Every call prints a warning. Pipeline passes mock check through to query output (⚠️ MOCK label).
@@ -62,12 +62,12 @@ Ingest time: ~0.2s | Query time: <100ms | Network calls: ZERO
 
 | Interface | File | Concrete impl | Phase |
 |-----------|------|---------------|-------|
-| EmbeddingProvider | `geoai/providers/embeddings/base.py` | MockProvider, RemoteCLIPProvider (needs weights) | 3 done, real model Phase 3 next |
-| IndexBackend | `geoai/providers/index/base.py` | FaissFlat done | — |
-| RegistrationProvider | `geoai/providers/registration/base.py` | OpenCVECC written, untested on real data | Phase 7 |
-| QualityAssessor | `geoai/providers/quality/base.py` | BasicQualityAssessor (nodata+completeness) | Basic done; cloud mask Phase 7 |
-| ChangeDetector | `geoai/providers/change/base.py` | None | Phase 7 |
-| TemporalEncoder | `geoai/providers/temporal/base.py` | None | Phase 7+ |
+| EmbeddingProvider | `terrae/providers/embeddings/base.py` | MockProvider, RemoteCLIPProvider (needs weights) | 3 done, real model Phase 3 next |
+| IndexBackend | `terrae/providers/index/base.py` | FaissFlat done | — |
+| RegistrationProvider | `terrae/providers/registration/base.py` | OpenCVECC written, untested on real data | Phase 7 |
+| QualityAssessor | `terrae/providers/quality/base.py` | BasicQualityAssessor (nodata+completeness) | Basic done; cloud mask Phase 7 |
+| ChangeDetector | `terrae/providers/change/base.py` | None | Phase 7 |
+| TemporalEncoder | `terrae/providers/temporal/base.py` | None | Phase 7+ |
 
 ### NOT STARTED
 

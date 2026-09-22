@@ -5,7 +5,7 @@ and evidence chain generation.
 """
 import numpy as np
 import pytest
-from geoai.change.attribution import (
+from terrae.change.attribution import (
     AttributionClass,
     attribute_change,
     compute_ndvi,
@@ -13,7 +13,7 @@ from geoai.change.attribution import (
     compute_spatial_coherence,
     DISCLAIMER_TEXT,
 )
-from geoai.core.result import ChangeVerdict
+from terrae.core.result import ChangeVerdict
 
 
 def test_ndvi_calculation():
@@ -177,7 +177,7 @@ def test_spatial_coherence():
 
 def test_existing_workflow_regression():
     """Test 8: Integration regression test with MetadataDB and TemporalAnalysisWorkflow."""
-    from geoai.app_factory import _load_config, build_metadata_db, build_temporal_workflow
+    from terrae.app_factory import _load_config, build_metadata_db, build_temporal_workflow
 
     cfg = _load_config("configs/config.yaml")
     db = build_metadata_db(cfg)

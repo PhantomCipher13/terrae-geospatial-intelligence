@@ -3,8 +3,8 @@ tests/unit/test_change.py
 Tests for change detection logic.
 """
 import numpy as np
-from geoai.providers.change.spectral_detector import SpectralChangeDetector
-from geoai.core.result import ChangeVerdict
+from terrae.providers.change.spectral_detector import SpectralChangeDetector
+from terrae.core.result import ChangeVerdict
 
 def test_spectral_change_detector():
     detector = SpectralChangeDetector(threshold=0.15, min_change_fraction=0.05)

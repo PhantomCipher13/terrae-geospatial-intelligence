@@ -33,10 +33,10 @@ from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from geoai.app_factory import build_retrieval_engine, build_temporal_workflow
-from geoai.planner.query_planner import plan_query
-from geoai.core.result import ChangeVerdict
-from geoai.change.attribution import DISPLAY_LABELS, DISCLAIMER_TEXT
+from terrae.app_factory import build_retrieval_engine, build_temporal_workflow
+from terrae.planner.query_planner import plan_query
+from terrae.core.result import ChangeVerdict
+from terrae.change.attribution import DISPLAY_LABELS, DISCLAIMER_TEXT
 
 st.set_page_config(
     page_title="TERRAE — Earth Intelligence",

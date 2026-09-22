@@ -32,7 +32,7 @@ import numpy as np
 import rasterio
 from PIL import Image
 
-from geoai.change.attribution import (
+from terrae.change.attribution import (
     attribute_change,
     compute_ndvi,
     compute_ndwi,
@@ -40,9 +40,9 @@ from geoai.change.attribution import (
     DISPLAY_LABELS,
     DISCLAIMER_TEXT,
 )
-from geoai.temporal.persistence import analyze_temporal_persistence, TemporalCategory
-from geoai.core.result import ChangeVerdict
-from geoai.providers.sensors.optical import OpticalAdapter
+from terrae.temporal.persistence import analyze_temporal_persistence, TemporalCategory
+from terrae.core.result import ChangeVerdict
+from terrae.providers.sensors.optical import OpticalAdapter
 
 
 def validate_real_sentinel_stack(

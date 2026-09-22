@@ -1,10 +1,10 @@
-﻿# GeoAI Workstation — Master Configuration
+﻿# TERRAE Workstation — Master Configuration
 # All paths are relative to the project root unless absolute.
 # No hardcoded machine-specific paths.
 
 # ─── Storage ──────────────────────────────────────────────────────────
 storage:
-  db_path: "data/geoai_metadata.db"
+  db_path: "data/terrae_metadata.db"
   index_dir: "data/faiss_index"
   tile_cache_dir: "data/tile_cache"
   models_dir: "models/local"

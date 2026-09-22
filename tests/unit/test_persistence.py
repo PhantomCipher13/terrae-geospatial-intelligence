@@ -7,7 +7,7 @@ import numpy as np
 import pytest
 import rasterio
 
-from geoai.temporal.persistence import (
+from terrae.temporal.persistence import (
     analyze_temporal_persistence,
     TemporalCategory,
     TemporalPersistenceResult,
@@ -270,10 +270,10 @@ def test_real_intermediate_fixture_properties():
 
 def test_workflow_persistence_integration():
     """Test 11: Workflow attaches persistence result and updates evidence chain."""
-    from geoai.db.metadata_db import MetadataDB
-    from geoai.temporal.workflow import TemporalAnalysisWorkflow
+    from terrae.db.metadata_db import MetadataDB
+    from terrae.temporal.workflow import TemporalAnalysisWorkflow
 
-    db = MetadataDB(Path("data/geoai_metadata.db"))
+    db = MetadataDB(Path("data/terrae_metadata.db"))
     rows = db._conn.execute(
         "SELECT t.tile_id FROM tiles t JOIN scenes s ON t.scene_id = s.scene_id WHERE s.source_path LIKE ? LIMIT 1",
         ("%real%",),

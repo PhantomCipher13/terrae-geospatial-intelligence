@@ -14,13 +14,13 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from geoai.benchmark.oscd import run_oscd_benchmark
-from geoai.providers.change.spectral_detector import SpectralChangeDetector
+from terrae.benchmark.oscd import run_oscd_benchmark
+from terrae.providers.change.spectral_detector import SpectralChangeDetector
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Run OSCD benchmark validation on GeoAI spectral change detector."
+        description="Run OSCD benchmark validation on TERRAE spectral change detector."
     )
     parser.add_argument(
         "--dir",

@@ -8,16 +8,16 @@ import numpy as np
 import pytest
 import rasterio
 
-from geoai.ingest.reader import read_metadata
-from geoai.providers.sensors.registry import get_adapter
-from geoai.providers.sensors.optical import OpticalAdapter
-from geoai.change.attribution import (
+from terrae.ingest.reader import read_metadata
+from terrae.providers.sensors.registry import get_adapter
+from terrae.providers.sensors.optical import OpticalAdapter
+from terrae.change.attribution import (
     attribute_change,
     compute_ndvi,
     compute_ndwi,
     AttributionClass,
 )
-from geoai.core.result import ChangeVerdict
+from terrae.core.result import ChangeVerdict
 
 DATA_DIR = Path("data/real/sentinel2")
 T0_PATH = DATA_DIR / "real_T0_20230519.tif"
@@ -155,7 +155,7 @@ def test_real_three_date_persistence():
     if not (T0_PATH.exists() and tmid_path.exists() and T1_PATH.exists()):
         pytest.skip("Three-date real Sentinel-2 data not staged.")
 
-    from geoai.temporal.persistence import analyze_temporal_persistence
+    from terrae.temporal.persistence import analyze_temporal_persistence
 
     with rasterio.open(T0_PATH) as ds0, rasterio.open(tmid_path) as ds_mid, rasterio.open(T1_PATH) as ds1:
         obs0 = np.clip(ds0.read() / 10000.0, 0.0, 1.0).astype(np.float32)

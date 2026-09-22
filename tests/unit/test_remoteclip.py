@@ -34,7 +34,7 @@ def real_provider():
     """Load a real RemoteCLIPProvider once for the whole module (expensive)."""
     if not WEIGHTS_AVAILABLE:
         pytest.skip("RemoteCLIP weights not staged at models/local/RemoteCLIP-ViT-B-32.pt")
-    from geoai.providers.embeddings.remoteclip_provider import RemoteCLIPProvider
+    from terrae.providers.embeddings.remoteclip_provider import RemoteCLIPProvider
     return RemoteCLIPProvider(model_name="ViT-B-32", device="cpu")
 
 
@@ -56,7 +56,7 @@ def rgb_image_chw():
 
 def test_missing_checkpoint_raises():
     """FileNotFoundError if weights_path points to non-existent file."""
-    from geoai.providers.embeddings.remoteclip_provider import RemoteCLIPProvider
+    from terrae.providers.embeddings.remoteclip_provider import RemoteCLIPProvider
     with pytest.raises(FileNotFoundError) as exc_info:
         RemoteCLIPProvider(
             model_name="ViT-B-32",
@@ -67,17 +67,17 @@ def test_missing_checkpoint_raises():
 
 def test_invalid_model_name_raises():
     """ValueError for unknown model variant."""
-    from geoai.providers.embeddings.remoteclip_provider import RemoteCLIPProvider
+    from terrae.providers.embeddings.remoteclip_provider import RemoteCLIPProvider
     with pytest.raises(ValueError, match="Unknown RemoteCLIP variant"):
         RemoteCLIPProvider(model_name="ViT-UNKNOWN-99")
 
 
 def test_no_weights_anywhere_raises(tmp_path, monkeypatch):
     """FileNotFoundError when no weights found in any default directory."""
-    from geoai.providers.embeddings import remoteclip_provider as m
+    from terrae.providers.embeddings import remoteclip_provider as m
     # Redirect default search dirs to an empty temp directory
     monkeypatch.setattr(m, "_DEFAULT_SEARCH_DIRS", [tmp_path / "nonexistent"])
-    from geoai.providers.embeddings.remoteclip_provider import RemoteCLIPProvider
+    from terrae.providers.embeddings.remoteclip_provider import RemoteCLIPProvider
     with pytest.raises(FileNotFoundError):
         RemoteCLIPProvider(model_name="ViT-B-32", weights_path=None)
 
@@ -87,7 +87,7 @@ def test_mock_is_not_fallback():
     Verifies that RemoteCLIPProvider never silently uses mock embeddings.
     When weights are missing, it must RAISE — not return a mock provider.
     """
-    from geoai.providers.embeddings.remoteclip_provider import RemoteCLIPProvider
+    from terrae.providers.embeddings.remoteclip_provider import RemoteCLIPProvider
     with pytest.raises((FileNotFoundError, Exception)):
         p = RemoteCLIPProvider(
             model_name="ViT-B-32",
@@ -99,23 +99,23 @@ def test_mock_is_not_fallback():
 
 def test_app_factory_mock_explicit():
     """MockEmbeddingProvider is returned when provider='mock' in config."""
-    from geoai.app_factory import build_embedding_provider
+    from terrae.app_factory import build_embedding_provider
     provider = build_embedding_provider({"embedding": {"provider": "mock"}})
-    from geoai.providers.embeddings.mock_provider import MockEmbeddingProvider
+    from terrae.providers.embeddings.mock_provider import MockEmbeddingProvider
     assert isinstance(provider, MockEmbeddingProvider)
     assert provider.is_mock
 
 
 def test_app_factory_invalid_provider():
     """Unknown provider name raises ValueError."""
-    from geoai.app_factory import build_embedding_provider
+    from terrae.app_factory import build_embedding_provider
     with pytest.raises(ValueError, match="Unknown embedding provider"):
         build_embedding_provider({"embedding": {"provider": "llama"}})
 
 
 def test_app_factory_empty_provider():
     """Empty provider name raises ValueError (not silently mock)."""
-    from geoai.app_factory import build_embedding_provider
+    from terrae.app_factory import build_embedding_provider
     with pytest.raises(ValueError):
         build_embedding_provider({"embedding": {"provider": ""}})
 

@@ -115,17 +115,17 @@ def mock_embedder():
     import warnings
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        from geoai.providers.embeddings.mock_provider import MockEmbeddingProvider
+        from terrae.providers.embeddings.mock_provider import MockEmbeddingProvider
         return MockEmbeddingProvider()
 
 
 @pytest.fixture
 def faiss_index():
-    from geoai.providers.index.faiss_flat import FaissFlat
+    from terrae.providers.index.faiss_flat import FaissFlat
     return FaissFlat(embedding_dim=512)
 
 
 @pytest.fixture
 def metadata_db(tmp_path):
-    from geoai.db.metadata_db import MetadataDB
+    from terrae.db.metadata_db import MetadataDB
     return MetadataDB(tmp_path / "test.db")

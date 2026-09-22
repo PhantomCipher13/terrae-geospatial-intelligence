@@ -102,7 +102,7 @@ $env:HF_HUB_OFFLINE="1"; $env:TRANSFORMERS_OFFLINE="1"; C:\Python311\python.exe 
 | Issue | Symptom | Immediate Fix |
 | :--- | :--- | :--- |
 | **Missing Model Checkpoint** | `FileNotFoundError: RemoteCLIP checkpoint not found` | Verify file exists at `models/local/RemoteCLIP-ViT-B-32.pt` (605 MB). Run from project root. |
-| **Wrong Working Directory** | `ModuleNotFoundError: No module named 'geoai'` | Ensure CWD is `c:\Users\Admin\Downloads\Internal hackathon\geoai_workstation` and run with `PYTHONPATH=.`. |
+| **Wrong Working Directory** | `ModuleNotFoundError: No module named 'terrae'` | Ensure CWD is `c:\Users\Admin\Downloads\Internal hackathon\terrae` and run with `PYTHONPATH=.`. |
 | **Empty Vector Index** | `Search returned 0 hits` | Check `data/faiss_index/index.faiss`. Run `C:\Python311\python.exe scripts/prepare_real_sentinel.py` to restore index. |
 | **Missing Staged Raster** | `FileNotFoundError: Required file not found: ...` | Verify `data/sample/temporal/` and `data/real/sentinel2/` directories exist with `.tif` files. |
 | **Streamlit Port Conflict** | `Address already in use` | Run with alternative port: `C:\Python311\python.exe -m streamlit run ui/app.py --server.port 8502`. |

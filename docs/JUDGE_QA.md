@@ -73,7 +73,7 @@ In our real-world Greater Noida / NCR 3-date stack (MGRS Tile `43RGM`):
 - Model weights: Pre-staged local PyTorch checkpoint (`models/local/RemoteCLIP-ViT-B-32.pt`, 605 MB).
 - Embeddings: Local CPU/GPU forward pass via `open-clip-torch`.
 - Index: Local FAISS Flat L2 index (`data/faiss_index/`).
-- Metadata: Local SQLite database (`data/geoai_metadata.db`).
+- Metadata: Local SQLite database (`data/terrae_metadata.db`).
 - Imagery: Local GeoTIFF rasters with windowed reads via Rasterio.
 - Runtime network calls: **Zero.**
 

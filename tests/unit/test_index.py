@@ -66,7 +66,7 @@ def test_save_and_load(faiss_index, tmp_dir):
     save_path = str(tmp_dir / "index")
     faiss_index.save(save_path)
 
-    from geoai.providers.index.faiss_flat import FaissFlat
+    from terrae.providers.index.faiss_flat import FaissFlat
     new_idx = FaissFlat(512)
     new_idx.load(save_path)
     assert new_idx.total_vectors == 10
@@ -75,7 +75,7 @@ def test_save_and_load(faiss_index, tmp_dir):
 
 
 def test_load_missing_raises(tmp_dir):
-    from geoai.providers.index.faiss_flat import FaissFlat
+    from terrae.providers.index.faiss_flat import FaissFlat
     idx = FaissFlat(512)
     with pytest.raises(FileNotFoundError):
         idx.load(str(tmp_dir / "nonexistent_index"))

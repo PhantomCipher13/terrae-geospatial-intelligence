@@ -1,4 +1,4 @@
-﻿# System Architecture — SIH26227 GeoAI Workstation
+﻿# System Architecture — SIH26227 TERRAE Workstation
 **Version:** 0.1 (Phase 3 MVP)  
 **Last Updated:** 2026-09-19
 
@@ -131,8 +131,8 @@ GeoTIFF / COG files (on-disk, organized by scene)
 ## 4. Module Structure
 
 ```
-geoai_workstation/
-├── geoai/
+terrae/
+├── terrae/
 │   ├── __init__.py
 │   ├── adapters/              # Sensor/band adapters
 │   │   ├── base.py            # Abstract BandAdapter

@@ -21,12 +21,12 @@ logging.basicConfig(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Ingest a GeoTIFF into the GeoAI index.")
+    parser = argparse.ArgumentParser(description="Ingest a GeoTIFF into the TERRAE index.")
     parser.add_argument("--file", required=True, help="Path to GeoTIFF or COG.")
     parser.add_argument("--config", default="configs/config.yaml", help="Config YAML path.")
     args = parser.parse_args()
 
-    from geoai.app_factory import build_ingest_pipeline, _load_config
+    from terrae.app_factory import build_ingest_pipeline, _load_config
     cfg = _load_config(args.config)
     pipeline, index, db, index_dir = build_ingest_pipeline(cfg)
 

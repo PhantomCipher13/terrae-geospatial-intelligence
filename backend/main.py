@@ -81,9 +81,9 @@ if ui_assets_dir.exists():
 # -----------------------------------------------------------------------------
 # CORE ENGINE LAZY INITIALIZATION & FALLBACK HANDLING
 # -----------------------------------------------------------------------------
-from geoai.app_factory import build_retrieval_engine, build_temporal_workflow, _load_config
-from geoai.change.attribution import DISPLAY_LABELS, DISCLAIMER_TEXT
-from geoai.core.result import ChangeVerdict
+from terrae.app_factory import build_retrieval_engine, build_temporal_workflow, _load_config
+from terrae.change.attribution import DISPLAY_LABELS, DISCLAIMER_TEXT
+from terrae.core.result import ChangeVerdict
 
 CANONICAL_CTRL_TILE = "747db63c-08b4-4d59-a8f6-fc6a570aeee1"
 CANONICAL_REAL_TILE = "2cbad278-c845-4e50-843e-abcc5d4382c6"

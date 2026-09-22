@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 from pathlib import Path
 
-from geoai.benchmark.oscd import (
+from terrae.benchmark.oscd import (
     OSCDMetrics,
     OSCDPair,
     compute_binary_metrics,
@@ -14,7 +14,7 @@ from geoai.benchmark.oscd import (
     load_oscd_pair,
     run_oscd_benchmark,
 )
-from geoai.providers.change.spectral_detector import SpectralChangeDetector
+from terrae.providers.change.spectral_detector import SpectralChangeDetector
 
 
 class TestMetricCorrectness:

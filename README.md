@@ -112,28 +112,28 @@ flowchart TD
     end
 
     subgraph RETRIEVAL ["01 & 02: SEMANTIC DISCOVERY"]
-        B["RemoteCLIP ViT-B/32<br/>(geoai.retrieval.embedder)"]
-        C["FAISS Flat L2 Vector Index<br/>(geoai.retrieval.index)"]
-        D["Candidate Tile Metadata Store<br/>(geoai.retrieval.metadata)"]
+        B["RemoteCLIP ViT-B/32<br/>(terrae.retrieval.embedder)"]
+        C["FAISS Flat L2 Vector Index<br/>(terrae.retrieval.index)"]
+        D["Candidate Tile Metadata Store<br/>(terrae.retrieval.metadata)"]
     end
 
     subgraph ALIGNMENT ["03: CO-REGISTRATION & DIFFERENCING"]
-        E["Sentinel-2 L2A BOA Reader<br/>(geoai.io.reader)"]
-        F["Phase-Correlation Co-Registration<br/>(geoai.change.coregistration)"]
-        G["4-Band Spectral Differencing (τ = 0.15)<br/>(geoai.change.spectral)"]
+        E["Sentinel-2 L2A BOA Reader<br/>(terrae.io.reader)"]
+        F["Phase-Correlation Co-Registration<br/>(terrae.change.coregistration)"]
+        G["4-Band Spectral Differencing (τ = 0.15)<br/>(terrae.change.spectral)"]
     end
 
     subgraph ATTRIBUTION ["04: PHYSICAL ATTRIBUTION ENGINE"]
         H["Multi-Spectral Delta Calculator<br/>(B02, B03, B04, B08)"]
         I["Band Index Decomposition<br/>(ΔNDVI, ΔNDWI, ΔNDBI)"]
-        J["Heuristic Signature Matching<br/>(geoai.attribution.engine)"]
+        J["Heuristic Signature Matching<br/>(terrae.attribution.engine)"]
     end
 
     subgraph VALIDATION ["05 & 06: CHALLENGE & DECIDE"]
-        K["Spatial Connected Components<br/>(geoai.spatial.topology)"]
-        L["3-Date Temporal Stack Classifier<br/>(geoai.temporal.persistence)"]
-        M["Auditable Decision Engine<br/>(geoai.decision.engine)"]
-        N["SHA-256 Provenance Logger<br/>(geoai.audit.provenance)"]
+        K["Spatial Connected Components<br/>(terrae.spatial.topology)"]
+        L["3-Date Temporal Stack Classifier<br/>(terrae.temporal.persistence)"]
+        M["Auditable Decision Engine<br/>(terrae.decision.engine)"]
+        N["SHA-256 Provenance Logger<br/>(terrae.audit.provenance)"]
     end
 
     A --> B
@@ -156,13 +156,13 @@ flowchart TD
 ### Module Mapping
 | Module | Location | Responsibility |
 | :--- | :--- | :--- |
-| **`geoai.retrieval`** | `geoai/retrieval/` | RemoteCLIP text/image embedding providers, FAISS index construction, similarity search |
-| **`geoai.change`** | `geoai/change/` | Co-registration, multi-band Euclidean differencing, adaptive thresholding |
-| **`geoai.attribution`** | `geoai/attribution/` | Heuristic signature matching, spectral delta calculations ($\Delta\text{NIR}, \Delta\text{Red}, \Delta\text{NDVI}$) |
-| **`geoai.temporal`** | `geoai/temporal/` | 3-date observation stack processing, 5 MECE trajectory classification |
-| **`geoai.spatial`** | `geoai/spatial/` | 8-connected component clustering, cluster compactness, coherence metrics |
-| **`geoai.decision`** | `geoai/decision/` | Multi-pillar evidence synthesis, conservative verdict rules (`SUPPORTED`/`REVIEW`/`ABSTAIN`) |
-| **`geoai.audit`** | `geoai/audit/` | SHA-256 cryptographic provenance hashing, timestamp verification, reproducible run logs |
+| **`terrae.retrieval`** | `terrae/retrieval/` | RemoteCLIP text/image embedding providers, FAISS index construction, similarity search |
+| **`terrae.change`** | `terrae/change/` | Co-registration, multi-band Euclidean differencing, adaptive thresholding |
+| **`terrae.attribution`** | `terrae/attribution/` | Heuristic signature matching, spectral delta calculations ($\Delta\text{NIR}, \Delta\text{Red}, \Delta\text{NDVI}$) |
+| **`terrae.temporal`** | `terrae/temporal/` | 3-date observation stack processing, 5 MECE trajectory classification |
+| **`terrae.spatial`** | `terrae/spatial/` | 8-connected component clustering, cluster compactness, coherence metrics |
+| **`terrae.decision`** | `terrae/decision/` | Multi-pillar evidence synthesis, conservative verdict rules (`SUPPORTED`/`REVIEW`/`ABSTAIN`) |
+| **`terrae.audit`** | `terrae/audit/` | SHA-256 cryptographic provenance hashing, timestamp verification, reproducible run logs |
 | **`api`** | `api/` | Production FastAPI endpoints (`/health`, `/docs`, `/api/search`, `/api/status`, `/api/cases/*`) |
 | **`frontend`** | `frontend/` | Next.js 14 responsive investigation console, touch-enabled wipe slider, workstation |
 | **`ui`** | `ui/` | Local desktop Streamlit research and demonstration console |
@@ -328,7 +328,7 @@ terrae-geospatial-intelligence/
 │   ├── public/assets/               # High-res authentic satellite imagery rasters
 │   ├── styles/globals.css           # Responsive viewport styles & custom properties
 │   └── package.json                 # Next.js 14 / React 18 configuration
-├── geoai/                           # Core TERRAE Earth Intelligence Python library
+├── terrae/                           # Core TERRAE Earth Intelligence Python library
 │   ├── __init__.py
 │   ├── app_factory.py               # Dependency injection & offline provider factory
 │   ├── attribution/                 # Physical multi-spectral attribution engine

@@ -1,4 +1,4 @@
-﻿# Offline Requirements — SIH26227 GeoAI Workstation
+﻿# Offline Requirements — SIH26227 TERRAE Workstation
 **Status:** Enforced — runtime must work with TRANSFORMERS_OFFLINE=1, HF_HUB_OFFLINE=1
 
 ---
@@ -55,7 +55,7 @@ C:\Python311\python.exe -X utf8 scripts\ingest.py --file data\sample\scene.tif
 Output:
 - `data/faiss_index/faiss_flat.index` — vector index
 - `data/faiss_index/faiss_idmap.json` — tile_id mapping
-- `data/geoai_metadata.db` — SQLite metadata
+- `data/terrae_metadata.db` — SQLite metadata
 
 ---
 

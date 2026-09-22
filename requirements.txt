@@ -1,4 +1,4 @@
-# GeoAI Workstation — Requirements
+# TERRAE Workstation — Requirements
 # Python 3.11 (Windows x64)
 # Install: C:\Python311\python.exe -m pip install -r requirements.txt
 # All packages must be available offline after initial install.

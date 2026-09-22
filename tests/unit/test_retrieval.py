@@ -7,10 +7,10 @@ import numpy as np
 def _build_engine(tmp_path):
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        from geoai.providers.embeddings.mock_provider import MockEmbeddingProvider
-    from geoai.providers.index.faiss_flat import FaissFlat
-    from geoai.db.metadata_db import MetadataDB
-    from geoai.retrieval.engine import RetrievalEngine
+        from terrae.providers.embeddings.mock_provider import MockEmbeddingProvider
+    from terrae.providers.index.faiss_flat import FaissFlat
+    from terrae.db.metadata_db import MetadataDB
+    from terrae.retrieval.engine import RetrievalEngine
     embedder = MockEmbeddingProvider()
     idx = FaissFlat(512)
     db = MetadataDB(tmp_path / "ret.db")
@@ -73,7 +73,7 @@ def test_top_k_respected(tmp_path):
 # ── Query Planner tests ──────────────────────────────────────────────────────
 
 def test_planner_retrieval_intent():
-    from geoai.planner.query_planner import plan_query
+    from terrae.planner.query_planner import plan_query
     plan = plan_query("Find urban areas in northern region")
     assert plan.intent == "semantic_retrieval"
     assert plan.requires_retrieval
@@ -82,7 +82,7 @@ def test_planner_retrieval_intent():
 
 
 def test_planner_change_intent():
-    from geoai.planner.query_planner import plan_query
+    from terrae.planner.query_planner import plan_query
     plan = plan_query("Where did construction increase between 2022 and 2024?")
     assert plan.intent == "change_detection"
     assert plan.requires_registration
@@ -91,13 +91,13 @@ def test_planner_change_intent():
 
 
 def test_planner_empty_query():
-    from geoai.planner.query_planner import plan_query
+    from terrae.planner.query_planner import plan_query
     plan = plan_query(None, None)
     assert plan.intent == "empty"
     assert not plan.requires_retrieval
 
 
 def test_planner_top_k_passed():
-    from geoai.planner.query_planner import plan_query
+    from terrae.planner.query_planner import plan_query
     plan = plan_query("find forests", top_k=25)
     assert plan.top_k == 25

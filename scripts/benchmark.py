@@ -109,7 +109,7 @@ def main():
     args = parser.parse_args()
 
     print("\n" + "=" * 60)
-    print("  GeoAI Workstation — Performance Benchmark")
+    print("  TERRAE Workstation — Performance Benchmark")
     print("=" * 60)
 
     # System info
@@ -128,7 +128,7 @@ def main():
 
     # Load components
     print(f"\n[Loading components from {args.config}]")
-    from geoai.app_factory import _load_config, build_embedding_provider, build_index_backend
+    from terrae.app_factory import _load_config, build_embedding_provider, build_index_backend
 
     cfg = _load_config(args.config)
     provider_name = cfg.get("embedding", {}).get("provider", "unknown")
@@ -171,11 +171,11 @@ def main():
 
     # End-to-end retrieval
     print(f"\n[End-to-End Retrieval]")
-    from geoai.db.metadata_db import MetadataDB
-    from geoai.retrieval.engine import RetrievalEngine
-    from geoai.planner.query_planner import plan_query
+    from terrae.db.metadata_db import MetadataDB
+    from terrae.retrieval.engine import RetrievalEngine
+    from terrae.planner.query_planner import plan_query
 
-    db = MetadataDB(Path(cfg.get("storage", {}).get("db_path", "data/geoai_metadata.db")))
+    db = MetadataDB(Path(cfg.get("storage", {}).get("db_path", "data/terrae_metadata.db")))
     engine = RetrievalEngine(embedder, idx, db)
     test_queries = ["urban area", "dense forest", "water body"]
     e2e_times = []

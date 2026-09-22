@@ -21,7 +21,7 @@ logging.basicConfig(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Query the GeoAI semantic index.")
+    parser = argparse.ArgumentParser(description="Query the TERRAE semantic index.")
     parser.add_argument("--text", default=None, help="Text query string.")
     parser.add_argument("--top-k", type=int, default=10, help="Number of results to return.")
     parser.add_argument("--config", default="configs/config.yaml", help="Config YAML path.")
@@ -31,8 +31,8 @@ def main():
         parser.print_help()
         sys.exit(1)
 
-    from geoai.app_factory import build_retrieval_engine, _load_config
-    from geoai.planner.query_planner import plan_query
+    from terrae.app_factory import build_retrieval_engine, _load_config
+    from terrae.planner.query_planner import plan_query
 
     cfg = _load_config(args.config)
     engine, index, db = build_retrieval_engine(cfg)

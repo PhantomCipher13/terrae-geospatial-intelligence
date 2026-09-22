@@ -1,4 +1,4 @@
-﻿# Research Log — SIH26227 GeoAI Workstation
+# Research Log — SIH26227 TERRAE Workstation
 **Last Updated:** 2026-09-19
 
 Each entry follows the format:
@@ -11,7 +11,7 @@ SOURCE | DATE | WHAT IT PROVES | HOW IT AFFECTS DESIGN
 ### A1. MR-ROGUE01/SIH-2026
 **SOURCE:** GitHub search, web search  
 **DATE:** 2026-09-19  
-**WHAT IT PROVES:** No publicly indexed repository found under this exact name for the satellite/GeoAI problem. May be private or submitted under different name.  
+**WHAT IT PROVES:** No publicly indexed repository found under this exact name for the satellite/TERRAE problem. May be private or submitted under different name.
 **HOW IT AFFECTS DESIGN:** Cannot assess. We design independently.
 
 ### A2. SlockAhuja/SIH_2026 / AETHER-EO

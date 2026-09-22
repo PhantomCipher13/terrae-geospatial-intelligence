@@ -146,7 +146,7 @@ def main():
     parser.add_argument("--config", default="configs/config.yaml")
     args = parser.parse_args()
 
-    from geoai.app_factory import _load_config, build_embedding_provider
+    from terrae.app_factory import _load_config, build_embedding_provider
     cfg = _load_config(args.config)
     embedder = build_embedding_provider(cfg)
     run_smoke_test(embedder)

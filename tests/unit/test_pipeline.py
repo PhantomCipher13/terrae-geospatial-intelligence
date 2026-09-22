@@ -7,10 +7,10 @@ import numpy as np
 def _make_pipeline(tmp_path, tile_size=32):
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        from geoai.providers.embeddings.mock_provider import MockEmbeddingProvider
-    from geoai.providers.index.faiss_flat import FaissFlat
-    from geoai.db.metadata_db import MetadataDB
-    from geoai.ingest.pipeline import IngestPipeline
+        from terrae.providers.embeddings.mock_provider import MockEmbeddingProvider
+    from terrae.providers.index.faiss_flat import FaissFlat
+    from terrae.db.metadata_db import MetadataDB
+    from terrae.ingest.pipeline import IngestPipeline
     embedder = MockEmbeddingProvider()
     idx = FaissFlat(512)
     db = MetadataDB(tmp_path / "test.db")

@@ -5,7 +5,7 @@
 ---
 
 ## 1. Prototype Overview
-**TERRAE** is a self-contained, offline Earth Intelligence and satellite investigation platform designed to move remote sensing workflows beyond uncalibrated binary change detection toward an auditable, multimodal evidence chain. Built upon multimodal GeoAI foundations, it operationalizes open-vocabulary semantic discovery with co-registered temporal observation stacks.
+**TERRAE** is a self-contained, offline Earth Intelligence and satellite investigation platform designed to move remote sensing workflows beyond uncalibrated binary change detection toward an auditable, multimodal evidence chain. Built upon multimodal TERRAE foundations, it operationalizes open-vocabulary semantic discovery with co-registered temporal observation stacks.
 
 ### Core Verified Capabilities
 - **Multimodal Semantic Retrieval:** Natural language text-to-imagery discovery executed locally via staged RemoteCLIP (ViT-B-32) and FAISS Flat L2 indexing, requiring zero external APIs.
@@ -42,7 +42,7 @@ The system identity is a **satellite investigation system, not merely a change d
 
 ## 3. Evidence-Based Change Attribution
 
-Traditional change detectors issue binary flags without scientific explanation. GeoAI implements **Evidence-Based Change Attribution**, generating structured evidence to explain candidate interpretations.
+Traditional change detectors issue binary flags without scientific explanation. TERRAE implements **Evidence-Based Change Attribution**, generating structured evidence to explain candidate interpretations.
 
 ### Methodology
 1. **Multi-Spectral Deltas:** Computes mean pixel differences across all 10m bands: $\Delta \text{Blue}$, $\Delta \text{Green}$, $\Delta \text{Red}$, $\Delta \text{NIR}$, $\Delta \text{NDVI}$, and $\Delta \text{NDWI}$.
@@ -61,7 +61,7 @@ Traditional change detectors issue binary flags without scientific explanation. 
 
 ## 4. Temporal Trajectory Analysis
 
-Two-date comparisons are inherently sensitive to seasonal, illumination, and phenological shifts. GeoAI integrates a **three-date temporal trajectory engine** evaluating interval dynamics across $T_0$, $T_{mid}$, and $T_1$.
+Two-date comparisons are inherently sensitive to seasonal, illumination, and phenological shifts. TERRAE integrates a **three-date temporal trajectory engine** evaluating interval dynamics across $T_0$, $T_{mid}$, and $T_1$.
 
 ### MECE Category Definitions
 Pixel transitions across the stack are partitioned into 5 mutually exclusive and collectively exhaustive categories over all valid pixels:

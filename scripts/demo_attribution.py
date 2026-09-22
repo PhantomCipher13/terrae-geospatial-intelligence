@@ -19,8 +19,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import time
 import numpy as np
-from geoai.app_factory import _load_config, build_metadata_db, build_temporal_workflow
-from geoai.change.attribution import attribute_change, DISPLAY_LABELS
+from terrae.app_factory import _load_config, build_metadata_db, build_temporal_workflow
+from terrae.change.attribution import attribute_change, DISPLAY_LABELS
 
 def main():
     print("=" * 70)

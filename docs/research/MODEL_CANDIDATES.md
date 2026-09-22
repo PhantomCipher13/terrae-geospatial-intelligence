@@ -1,4 +1,4 @@
-﻿# Model Candidates — SIH26227 GeoAI Workstation
+﻿# Model Candidates — SIH26227 TERRAE Workstation
 **Date:** 2026-09-19
 
 Selection criteria: accuracy × latency × memory × storage × offline feasibility × implementation complexity

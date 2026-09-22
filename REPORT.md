@@ -66,7 +66,7 @@ To maintain absolute scientific rigor, TERRAE strictly adheres to clear operatio
 ## 3. TECHNICAL APPROACH / METHODOLOGY & PROCESS OF IMPLEMENTATION
 
 ### 3.1 System Architecture
-TERRAE is organized into modular, decoupled Python components within the core `geoai` analytical package, exposing both an offline Streamlit analysis workstation and a FastAPI REST backend.
+TERRAE is organized into modular, decoupled Python components within the core `terrae` analytical package, exposing both an offline Streamlit analysis workstation and a FastAPI REST backend.
 
 ```mermaid
 flowchart TD
@@ -76,33 +76,33 @@ flowchart TD
     end
 
     subgraph Intent ["Query & Intent Layer"]
-        QP["geoai.planner.query_planner\nQuery Parsing & Search Plan"]
+        QP["terrae.planner.query_planner\nQuery Parsing & Search Plan"]
     end
 
     subgraph Retrieval ["Semantic Retrieval Engine"]
-        RCLIP["geoai.providers.embeddings.remoteclip_provider\nRemoteCLIP ViT-B-32 (512-dim)"]
-        FAISS["geoai.providers.index.faiss_flat\nFAISS IndexFlatIP (Unit Vector Cosine)"]
-        MDB["geoai.db.metadata_db\nSQLite Metadata Store (scenes, tiles)"]
+        RCLIP["terrae.providers.embeddings.remoteclip_provider\nRemoteCLIP ViT-B-32 (512-dim)"]
+        FAISS["terrae.providers.index.faiss_flat\nFAISS IndexFlatIP (Unit Vector Cosine)"]
+        MDB["terrae.db.metadata_db\nSQLite Metadata Store (scenes, tiles)"]
     end
 
     subgraph Matching ["Temporal & Spatial Alignment"]
-        TMAT["geoai.temporal.workflow\nTemporal Matcher (pixel_window + WGS84 bounds)"]
+        TMAT["terrae.temporal.workflow\nTemporal Matcher (pixel_window + WGS84 bounds)"]
         S2GRID["Sentinel-2 MGRS Pre-Aligned Grid\n(EPSG:32643 / 10m UTM)"]
     end
 
     subgraph Detection ["Physical Spectral Engine"]
-        SCD["geoai.providers.change.spectral_detector\nSpectral Differencing (B02, B03, B04, B08; tau=0.15)"]
+        SCD["terrae.providers.change.spectral_detector\nSpectral Differencing (B02, B03, B04, B08; tau=0.15)"]
         IND["Indices Engine\nNDVI & NDWI Calculation"]
     end
 
     subgraph Attribution ["Attribution & Persistence Layer"]
-        ATTR["geoai.change.attribution\nHeuristic Attribution Support (6 Signatures)"]
+        ATTR["terrae.change.attribution\nHeuristic Attribution Support (6 Signatures)"]
         COH["Spatial Coherence Engine\nConnected Component Labeling (scipy.ndimage)"]
-        PERS["geoai.temporal.persistence\n3-Date MECE Trajectory Classifier"]
+        PERS["terrae.temporal.persistence\n3-Date MECE Trajectory Classifier"]
     end
 
     subgraph Decision ["Audit & Decision Layer"]
-        DEC["geoai.core.result\nChangeVerdict (SUPPORTED / REVIEW / ABSTAIN)"]
+        DEC["terrae.core.result\nChangeVerdict (SUPPORTED / REVIEW / ABSTAIN)"]
     end
 
     Q --> QP
@@ -125,28 +125,28 @@ flowchart TD
 ### 3.2 Semantic Retrieval Engine
 The semantic retrieval engine allows an analyst to locate relevant satellite scenes through cross-modal semantic matching:
 
-- **Embedding Model (`geoai.providers.embeddings.remoteclip_provider`)**: Utilizes **RemoteCLIP ViT-B-32** (Chen et al., 2024), a vision-language foundation model pre-trained on domain-specific remote sensing imagery and captions. 
+- **Embedding Model (`terrae.providers.embeddings.remoteclip_provider`)**: Utilizes **RemoteCLIP ViT-B-32** (Chen et al., 2024), a vision-language foundation model pre-trained on domain-specific remote sensing imagery and captions.
   - *Architecture*: Vision Transformer ViT-B-32 (input resolution $224 \times 224$ pixels, patch size $32$).
   - *Embedding Dimension*: $d = 512$.
   - *Weight Checkpoint*: `RemoteCLIP-ViT-B-32.pt` ($\approx 605\text{ MB}$ staged locally in `models/local/`).
   - *Offline Loading*: Direct PyTorch `torch.load()` of local state dict into bare OpenCLIP architecture with `pretrained=None`. Zero runtime network calls.
-- **Vector Index (`geoai.providers.index.faiss_flat`)**: Implemented via FAISS CPU using `IndexIDMap(IndexFlatIP(512))`. Both text query embeddings $\mathbf{q}$ and image tile embeddings $\mathbf{v}_i$ are $L_2$-normalized:
+- **Vector Index (`terrae.providers.index.faiss_flat`)**: Implemented via FAISS CPU using `IndexIDMap(IndexFlatIP(512))`. Both text query embeddings $\mathbf{q}$ and image tile embeddings $\mathbf{v}_i$ are $L_2$-normalized:
   $$\hat{\mathbf{q}} = \frac{\mathbf{q}}{\|\mathbf{q}\|_2}, \quad \hat{\mathbf{v}}_i = \frac{\mathbf{v}_i}{\|\mathbf{v}_i\|_2}$$
   The inner product computed by FAISS is mathematically identical to cosine similarity:
   $$s(\mathbf{q}, \mathbf{v}_i) = \hat{\mathbf{q}} \cdot \hat{\mathbf{v}}_i = \cos(\theta)$$
-- **Metadata Store (`geoai.db.metadata_db`)**: A localized SQLite database (`data/metadata.db`) decoupled from the vector index. Uses stable UUID primary keys (`tile_id`) linking the FAISS index to scene metadata:
+- **Metadata Store (`terrae.db.metadata_db`)**: A localized SQLite database (`data/metadata.db`) decoupled from the vector index. Uses stable UUID primary keys (`tile_id`) linking the FAISS index to scene metadata:
   - `scenes`: `scene_id`, `source_path`, `file_hash`, `crs_epsg`, `bounds_wgs84`, `acquisition_date`, `sensor`.
   - `tiles`: `tile_id`, `scene_id`, `pixel_window` (`[col_off, row_off, w, h]`), `bounds_wgs84`, `nodata_fraction`.
 
 ### 3.3 Temporal Matching & Spatial Alignment
-When an analyst selects a candidate tile, the temporal matcher (`geoai.temporal.workflow`) retrieves all available historical and future observations of that precise physical footprint:
+When an analyst selects a candidate tile, the temporal matcher (`terrae.temporal.workflow`) retrieves all available historical and future observations of that precise physical footprint:
 
 - **Matching Logic**: Multi-temporal observation records are filtered by checking two simultaneous criteria against candidate tiles in the SQLite database:
   $$\text{Match}(T_{\text{target}}, T_{\text{candidate}}) \iff \left( \text{window}(T_{\text{target}}) = \text{window}(T_{\text{candidate}}) \right) \land \left( \text{Overlap}(\text{bounds}_{\text{target}}, \text{bounds}_{\text{candidate}}) > 0 \right)$$
 - **Sentinel-2 MGRS Consistency**: Sentinel-2 Level-2A products are distributed pre-tiled along the standard UTM Military Grid Reference System (MGRS). Observations within the same MGRS tile (e.g., `43RGM`) share identical projected coordinate reference systems (EPSG:32643) and aligned $10\text{ m}$ pixel grids. This eliminates sub-pixel geometric warping errors and sets registration status to `REGISTRATION_NOT_REQUIRED`.
 
 ### 3.4 Spectral Change Detection
-The spectral change detector (`geoai.providers.change.spectral_detector.SpectralChangeDetector`) operates directly on multi-band surface reflectance arrays:
+The spectral change detector (`terrae.providers.change.spectral_detector.SpectralChangeDetector`) operates directly on multi-band surface reflectance arrays:
 
 - **Production Bands ($B=4$)**:
   - Band 1: Sentinel-2 $B02$ (Blue, $\lambda \approx 490\text{ nm}$)
@@ -164,7 +164,7 @@ The spectral change detector (`geoai.providers.change.spectral_detector.Spectral
   where $|V|$ is the total count of valid, cloud-free pixels.
 
 ### 3.5 Spectral Indices
-The attribution engine calculates standardized spectral indices to track physical land-cover transformations (`geoai.change.attribution`):
+The attribution engine calculates standardized spectral indices to track physical land-cover transformations (`terrae.change.attribution`):
 
 1. **Normalized Difference Vegetation Index (NDVI)**:
    $$\text{NDVI} = \text{clip}\left(\frac{I(\text{NIR}) - I(\text{Red})}{I(\text{NIR}) + I(\text{Red}) + \epsilon}, -1.0, 1.0\right)$$
@@ -218,7 +218,7 @@ Valid Pixels (100%)
 > **Temporal trajectory evidence is not proof of causality, and reversibility is not automatically proof of seasonality.** Trajectories reflect observed spectral reflections over time; physical cause must be confirmed by qualified operational analysts.
 
 ### 3.9 Conservative Decision Layer
-The decision engine (`geoai.core.result.ChangeVerdict`) integrates multi-pillar evidence through conservative rules:
+The decision engine (`terrae.core.result.ChangeVerdict`) integrates multi-pillar evidence through conservative rules:
 
 - **`SUPPORTED`**: Issued only when:
   1. Co-registration is verified (`REGISTRATION_GOOD` or `REGISTRATION_NOT_REQUIRED`).
@@ -393,9 +393,9 @@ The repository maintains an automated test suite executed via `pytest tests/ -q`
 - **Reproducibility**: The analytical pipeline is fully deterministic; all detection parameters ($\tau = 0.15$), observation timestamps, spatial windows, and evidence metrics are recorded in structured dataclasses (`TemporalChangeResult`, `AttributionResult`), ensuring repeatable verification without stochastic drift.
 
 ### 4.3 Scalability Analysis (Architectural Potential)
-- **Vector Index Scalability**: While the current deployment uses FAISS `IndexFlatIP` (exact brute-force search on small collections), the index backend interface (`geoai.providers.index.base.IndexBackend`) supports swapping to `IndexIVFFlat` or `IndexHNSWFlat` for million-tile collections without altering pipeline logic.
+- **Vector Index Scalability**: While the current deployment uses FAISS `IndexFlatIP` (exact brute-force search on small collections), the index backend interface (`terrae.providers.index.base.IndexBackend`) supports swapping to `IndexIVFFlat` or `IndexHNSWFlat` for million-tile collections without altering pipeline logic.
 - **Multi-Date Extensions**: The trajectory classifier can be generalized from 3 dates to arbitrary $N$-date dense time series via sliding-window trajectory smoothing.
-- **Sensor Extension**: The sensor registry pattern (`geoai.providers.sensors.registry`) provides clean extension points for synthetic aperture radar (SAR / Sentinel-1) and thermal sensors.
+- **Sensor Extension**: The sensor registry pattern (`terrae.providers.sensors.registry`) provides clean extension points for synthetic aperture radar (SAR / Sentinel-1) and thermal sensors.
 
 ---
 
