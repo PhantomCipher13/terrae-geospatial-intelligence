@@ -1,0 +1,49 @@
+# =============================================================================
+# TERRAE — Git Ignore Rules
+# =============================================================================
+
+# --- Python Bytecode & Environments -----------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# --- Testing & Coverage -----------------------------------------------------
+.pytest_cache/
+.coverage
+htmlcov/
+
+# --- IDE & OS Metadata ------------------------------------------------------
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# --- Large Binary Model Weights (>100MB, staged via scripts/download_models.py)
+models/local/*.pt
+models/local/*.bin
+models/local/*.safetensors
+models/local/.cache/
+
+# --- SQLite Runtime Locks & Journals ---------------------------------------
+*.db-wal
+*.db-shm
+*.db-journal
+
+# --- Scratch, Logs & Browser Profiles ---------------------------------------
+temp_chrome_profile/
+scratch/
+logs/
+*.log

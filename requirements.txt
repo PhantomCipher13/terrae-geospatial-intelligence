@@ -1,0 +1,39 @@
+﻿# GeoAI Workstation — Requirements
+# Python 3.11 (Windows x64)
+# Install: C:\Python311\python.exe -m pip install -r requirements.txt
+# All packages must be available offline after initial install.
+
+# ── Geospatial raster I/O ─────────────────────────────────────────────
+rasterio>=1.4.0,<2.0          # GeoTIFF/COG read/write with GDAL bundled
+
+# ── Vector index ──────────────────────────────────────────────────────
+faiss-cpu>=1.7.4              # Exact + approximate vector search (CPU)
+
+# ── Numerics ──────────────────────────────────────────────────────────
+numpy>=1.24.0,<3.0
+scipy>=1.10.0,<2.0
+
+# ── Image processing ──────────────────────────────────────────────────
+Pillow>=10.0.0,<12.0
+opencv-python>=4.8.0          # Already installed (co-registration)
+
+# ── ML / Embeddings ──────────────────────────────────────────────────
+# PyTorch: already installed via previous project
+# torch>=2.1.0                # Install from pytorch.org
+# torchvision>=0.16.0
+open-clip-torch>=2.24.0       # For RemoteCLIP (download weights separately)
+
+# ── Config ────────────────────────────────────────────────────────────
+pyyaml>=6.0.1,<7.0
+
+# ── Data validation ───────────────────────────────────────────────────
+pydantic>=2.7.0,<3.0
+
+# ── Testing ───────────────────────────────────────────────────────────
+pytest>=8.0.0,<10.0
+
+# ── Optional: model download helper ──────────────────────────────────
+# huggingface_hub>=1.0.0      # Already installed — for pre-staging models
+# transformers>=4.40.0        # For GeoRSCLIP (alternative provider)
+
+streamlit>=1.30.0

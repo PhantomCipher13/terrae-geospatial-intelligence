@@ -1,0 +1,58 @@
+﻿# GeoAI Workstation — Master Configuration
+# All paths are relative to the project root unless absolute.
+# No hardcoded machine-specific paths.
+
+# ─── Storage ──────────────────────────────────────────────────────────
+storage:
+  db_path: "data/geoai_metadata.db"
+  index_dir: "data/faiss_index"
+  tile_cache_dir: "data/tile_cache"
+  models_dir: "models/local"
+
+# ─── Ingest ───────────────────────────────────────────────────────────
+ingest:
+  tile_size: 256
+  tile_overlap: 0
+  nodata_threshold: 0.9
+  quality_fail_action: "skip"
+  batch_size: 32
+
+# ─── Embedding ────────────────────────────────────────────────────────
+# provider: 'mock' | 'remoteclip'
+# There is NO implicit fallback from remoteclip -> mock.
+# If remoteclip weights are missing, startup will FAIL with FileNotFoundError.
+# To use mock embeddings explicitly: set provider to 'mock'.
+embedding:
+  provider: "remoteclip"
+  remoteclip:
+    model: "ViT-B-32"
+    checkpoint: "models/local/RemoteCLIP-ViT-B-32.pt"
+    device: "cpu"       # 'cpu' | 'cuda' | 'auto'
+
+# ─── Index ────────────────────────────────────────────────────────────
+index:
+  backend: "faiss_flat"
+  embedding_dim: 512     # Must match embedding provider output dim
+
+# ─── Retrieval ────────────────────────────────────────────────────────
+retrieval:
+  default_top_k: 10
+  max_top_k: 100
+
+# ─── Quality ──────────────────────────────────────────────────────────
+quality:
+  assessor: "basic"
+  nodata_fail_threshold: 0.9
+  nodata_warn_threshold: 0.5
+
+# ─── Registration ─────────────────────────────────────────────────────
+registration:
+  provider: "opencv_ecc"
+  warp_mode: "translation"
+  ncc_threshold_good: 0.95
+  ncc_threshold_borderline: 0.80
+
+# ─── Logging ──────────────────────────────────────────────────────────
+logging:
+  level: "INFO"
+  format: "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
