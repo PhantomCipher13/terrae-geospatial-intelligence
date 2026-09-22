@@ -9,11 +9,13 @@
 
 | Component | Platform | Live URL | Description |
 | :--- | :--- | :--- | :--- |
-| **Frontend Web Console** | **Vercel** | **[https://frontend-seven-lac-65.vercel.app](https://frontend-seven-lac-65.vercel.app)** | Interactive Next.js 14 console & Earth Intelligence workstation |
+| **Frontend Web Console** | **Vercel** | **[https://terrae-geospatial-intelligence.vercel.app](https://terrae-geospatial-intelligence.vercel.app)** | Primary Next.js 14 console & Earth Intelligence workstation |
+| **Console Mirror** | **Vercel** | **[https://terrae-earth-intelligence.vercel.app](https://terrae-earth-intelligence.vercel.app)** | Branded production mirror |
 | **Backend REST API** | **Render** | **[https://terrae-backend.onrender.com](https://terrae-backend.onrender.com)** | Operational FastAPI service & branded developer portal |
 | **Interactive API Docs** | **Render** | **[https://terrae-backend.onrender.com/docs](https://terrae-backend.onrender.com/docs)** | OpenAPI / Swagger UI live testbed |
 | **Health Probe** | **Render** | **[https://terrae-backend.onrender.com/health](https://terrae-backend.onrender.com/health)** | Real-time service uptime probe (`HTTP 200`) |
 | **System Status** | **Render** | **[https://terrae-backend.onrender.com/api/status](https://terrae-backend.onrender.com/api/status)** | FAISS telemetry & pipeline capability matrix |
+
 
 ---
 

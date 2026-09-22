@@ -227,7 +227,7 @@ def root_endpoint(request: Request):
                 "cases_real_s2": "/api/cases/real-sentinel2",
                 "evidence_layers": "/api/evidence/layers"
             },
-            "frontend": "https://frontend-seven-lac-65.vercel.app"
+            "frontend": "https://terrae-geospatial-intelligence.vercel.app"
         })
 
     html_content = """<!DOCTYPE html>
@@ -359,7 +359,7 @@ def root_endpoint(request: Request):
     <p class="tagline">Earth Intelligence · Satellite Investigation Console API</p>
     
     <div class="grid">
-      <a href="https://frontend-seven-lac-65.vercel.app" class="card" style="border-color: rgba(197,168,105,0.45); background: rgba(197,168,105,0.08);">
+      <a href="https://terrae-geospatial-intelligence.vercel.app" class="card" style="border-color: rgba(197,168,105,0.45); background: rgba(197,168,105,0.08);">
         <div class="card-title">🖥️ Web Console</div>
         <div class="card-desc">Interactive Next.js Vercel frontend for multi-spectral analysis & editorial view.</div>
       </a>
