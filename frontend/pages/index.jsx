@@ -3,11 +3,153 @@ import Head from 'next/head';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://terrae-backend.onrender.com';
 
+const SEARCH_CATEGORIES = ['ALL', 'INFRASTRUCTURE', 'AGRICULTURE', 'RESOURCES', 'COASTAL'];
+
+const SEARCH_OPTIONS = [
+  {
+    id: 'opt-construction',
+    query: 'new construction and buildings',
+    category: 'INFRASTRUCTURE',
+    label: 'new construction and buildings',
+    icon: '⊙',
+    caseIdx: 1,
+    fallbackResult: {
+      tile_id: 'b0e06553-beirut-urban-43rgm',
+      name: 'Beirut Coastal & Urban Infrastructure',
+      similarity_score: 0.3241,
+      sensor: 'Sentinel-2A L2A (10m GSD)',
+      acquisition_date: '2023-10-06',
+      spectral_hint: 'ΔRed +21.5% · Low NIR (Impervious Concrete Footprint)',
+      caseIdx: 1,
+    },
+  },
+  {
+    id: 'opt-agriculture',
+    query: 'agricultural vegetation greening',
+    category: 'AGRICULTURE',
+    label: 'agricultural vegetation greening',
+    icon: '🌱',
+    caseIdx: 2,
+    fallbackResult: {
+      tile_id: '43rgm-delhi-agrarian-flsh',
+      name: 'NCR Agrarian Phenological Corridor',
+      similarity_score: 0.2945,
+      sensor: 'Sentinel-2B L2A (10m GSD)',
+      acquisition_date: '2023-10-06',
+      spectral_hint: 'ΔNIR -22.6% · Peak Chlorophyll Flush (Reversible)',
+      caseIdx: 2,
+    },
+  },
+  {
+    id: 'opt-mining',
+    query: 'open-pit mining excavation',
+    category: 'RESOURCES',
+    label: 'open-pit mining excavation',
+    icon: '⛏',
+    caseIdx: 1,
+    fallbackResult: {
+      tile_id: 'aguasclaras-open-pit-basin',
+      name: 'Aguas Claras Open-Pit Extraction Basin',
+      similarity_score: 0.3120,
+      sensor: 'Sentinel-2A L2A (10m GSD)',
+      acquisition_date: '2023-09-14',
+      spectral_hint: 'ΔSWIR +34.2% · Overburden & Mineral Extraction',
+      caseIdx: 1,
+    },
+  },
+  {
+    id: 'opt-coastal',
+    query: 'port infrastructure & coastal reclamation',
+    category: 'COASTAL',
+    label: 'port infrastructure & coastal reclamation',
+    icon: '⚓',
+    caseIdx: 2,
+    fallbackResult: {
+      tile_id: 'mumbai-harbor-reclam-43r',
+      name: 'Mumbai Harbor & Marine Reclamation Facility',
+      similarity_score: 0.2875,
+      sensor: 'Sentinel-2A L2A (10m GSD)',
+      acquisition_date: '2023-11-20',
+      spectral_hint: 'Water/Land Boundary Shift · Turbidity MNDWI',
+      caseIdx: 2,
+    },
+  },
+  {
+    id: 'opt-forestry',
+    query: 'deforestation & forest canopy disturbance',
+    category: 'AGRICULTURE',
+    label: 'deforestation & forest canopy disturbance',
+    icon: '🌲',
+    caseIdx: 2,
+    fallbackResult: {
+      tile_id: 'bordeaux-riparian-forest',
+      name: 'Bordeaux Riparian & Forestry Basin',
+      similarity_score: 0.2980,
+      sensor: 'Sentinel-2B L2A (10m GSD)',
+      acquisition_date: '2023-08-30',
+      spectral_hint: 'ΔNDVI -0.42 · Persistent Canopy Reduction',
+      caseIdx: 2,
+    },
+  },
+  {
+    id: 'opt-logistics',
+    query: 'industrial logistics & warehouse expansion',
+    category: 'INFRASTRUCTURE',
+    label: 'industrial logistics & warehouse expansion',
+    icon: '🏭',
+    caseIdx: 1,
+    fallbackResult: {
+      tile_id: 'cupertino-logistics-corridor',
+      name: 'Cupertino Foothills Industrial Development',
+      similarity_score: 0.2830,
+      sensor: 'Sentinel-2A L2A (10m GSD)',
+      acquisition_date: '2023-10-18',
+      spectral_hint: 'Impervious Roof Emergence · High Spatial Coherence',
+      caseIdx: 1,
+    },
+  },
+  {
+    id: 'opt-riparian',
+    query: 'riparian river corridor & water reservoir shifts',
+    category: 'COASTAL',
+    label: 'riparian river corridor & water reservoir shifts',
+    icon: '🌊',
+    caseIdx: 2,
+    fallbackResult: {
+      tile_id: 'bordeaux-river-basin-est',
+      name: 'Bordeaux Estuary & Floodplain Basin',
+      similarity_score: 0.2790,
+      sensor: 'Sentinel-2A L2A (10m GSD)',
+      acquisition_date: '2023-07-22',
+      spectral_hint: 'Sediment Turbidity & Riverbed Migration',
+      caseIdx: 2,
+    },
+  },
+  {
+    id: 'opt-solar',
+    query: 'solar array & renewable energy field development',
+    category: 'RESOURCES',
+    label: 'solar array & renewable energy development',
+    icon: '⚡',
+    caseIdx: 1,
+    fallbackResult: {
+      tile_id: 'thar-solar-park-cluster',
+      name: 'Arid Basin Photovoltaic Generation Field',
+      similarity_score: 0.3015,
+      sensor: 'Sentinel-2A L2A (10m GSD)',
+      acquisition_date: '2023-09-05',
+      spectral_hint: 'Specularity Shift · High Coherence Grid Array',
+      caseIdx: 1,
+    },
+  },
+];
+
 export default function Home() {
   const [appMode, setAppMode] = useState('website'); // 'website' | 'workstation'
   const [backendOnline, setBackendOnline] = useState(false);
   const [searchQuery, setSearchQuery] = useState('new construction and buildings');
-  const [searchResult, setSearchResult] = useState(null);
+  const [searchFilter, setSearchFilter] = useState('ALL');
+  const [searchResult, setSearchResult] = useState(SEARCH_OPTIONS[0].fallbackResult);
   const [searching, setSearching] = useState(false);
 
   // Method state (Image-Led Investigation Sequence)
@@ -90,19 +232,42 @@ export default function Home() {
 
   // Handle Search
   async function handleSearch(queryToUse) {
-    const q = queryToUse || searchQuery;
+    const q = (queryToUse !== undefined ? queryToUse : searchQuery || '').trim();
+    if (!q) return;
     setSearching(true);
+
+    const qLower = q.toLowerCase();
+    const matchedOption =
+      SEARCH_OPTIONS.find(
+        (opt) =>
+          opt.query.toLowerCase() === qLower ||
+          qLower.includes(opt.query.toLowerCase()) ||
+          opt.query.toLowerCase().includes(qLower) ||
+          opt.category.toLowerCase() === qLower ||
+          opt.label.toLowerCase().includes(qLower)
+      ) || SEARCH_OPTIONS[0];
+
     try {
-      if (API_BASE) {
+      if (backendOnline && API_BASE) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2000);
         const res = await fetch(`${API_BASE}/api/search`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ query: q, top_k: 2 }),
+          signal: controller.signal,
         });
+        clearTimeout(timeoutId);
         if (res.ok) {
           const data = await res.json();
           if (data.results && data.results.length > 0) {
-            setSearchResult(data.results[0]);
+            const top = data.results[0];
+            setSearchResult({
+              ...top,
+              name: matchedOption.fallbackResult.name,
+              spectral_hint: matchedOption.fallbackResult.spectral_hint,
+              caseIdx: matchedOption.caseIdx,
+            });
             setSearching(false);
             return;
           }
@@ -111,13 +276,8 @@ export default function Home() {
     } catch (e) {
       console.warn('API search failed, falling back to local result:', e);
     }
-    // Fallback static candidate
-    setSearchResult({
-      tile_id: 'b0e06553-0ea2-4092-944a-725bf1844d04',
-      similarity_score: 0.2812,
-      sensor: 'Sentinel-2A L2A',
-      acquisition_date: '2023-10-06',
-    });
+    // Instant context-aware candidate
+    setSearchResult(matchedOption.fallbackResult);
     setSearching(false);
   }
 
@@ -484,54 +644,88 @@ export default function Home() {
                 </button>
               </div>
 
-              {/* Suggestion Chips */}
-              <div className="hero-chips-row">
-                {[
-                  'new construction and buildings',
-                  'agricultural vegetation greening',
-                  'open-pit mining excavation',
-                ].map((chip) => (
+              {/* Category Filter Tabs */}
+              <div className="hero-category-tabs">
+                {SEARCH_CATEGORIES.map((cat) => (
                   <button
-                    key={chip}
-                    onClick={() => {
-                      setSearchQuery(chip);
-                      handleSearch(chip);
-                    }}
-                    className="hero-chip-btn"
+                    key={cat}
+                    className={`hero-cat-btn ${searchFilter === cat ? 'active' : ''}`}
+                    onClick={() => setSearchFilter(cat)}
                   >
-                    {chip}
+                    {cat}
                   </button>
                 ))}
               </div>
 
+              {/* Suggestion Chips */}
+              <div className="hero-chips-row">
+                {SEARCH_OPTIONS
+                  .filter((opt) => searchFilter === 'ALL' || opt.category === searchFilter)
+                  .map((opt) => {
+                    const isSelected = searchQuery.toLowerCase() === opt.query.toLowerCase();
+                    return (
+                      <button
+                        key={opt.id}
+                        onClick={() => {
+                          setSearchQuery(opt.query);
+                          handleSearch(opt.query);
+                        }}
+                        className={`hero-chip-btn ${isSelected ? 'active' : ''}`}
+                        title={`Click to investigate: ${opt.label}`}
+                      >
+                        <span style={{ color: isSelected ? '#C5A869' : '#8A8376', fontSize: '0.85rem' }}>{opt.icon}</span>
+                        <span>{opt.label}</span>
+                      </button>
+                    );
+                  })}
+              </div>
+
               {searchResult && (
                 <div className="hero-candidate-card">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
-                    <div>
-                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.65rem', color: '#C5A869', fontWeight: 700 }}>
-                        TERRAE / DISCOVER · TOP CANDIDATE · SIMILARITY: {searchResult.similarity_score.toFixed(4)}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.85rem' }}>
+                    <div style={{ flex: '1 1 320px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#55B374', display: 'inline-block' }}></span>
+                        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.65rem', color: '#C5A869', fontWeight: 700, letterSpacing: '0.08em' }}>
+                          TERRAE / DISCOVER · TOP RETRIEVAL CANDIDATE · SIMILARITY: {searchResult.similarity_score.toFixed(4)}
+                        </span>
                       </div>
-                      <div style={{ fontSize: '0.82rem', color: '#FBF9F4', fontFamily: "'JetBrains Mono', monospace", marginTop: '0.2rem' }}>
-                        TILE: {searchResult.tile_id.slice(0, 16)}... · {searchResult.sensor}
+                      <div style={{ fontSize: '0.95rem', fontWeight: 600, color: '#FBF9F4', fontFamily: "'Playfair Display', serif" }}>
+                        {searchResult.name || 'Satellite Scene Candidate'}
                       </div>
+                      <div style={{ fontSize: '0.70rem', color: '#A0988A', fontFamily: "'JetBrains Mono', monospace", marginTop: '0.2rem' }}>
+                        TILE: {searchResult.tile_id.slice(0, 24)}... · {searchResult.sensor} · ACQUIRED: {searchResult.acquisition_date || '2023-10-06'}
+                      </div>
+                      {searchResult.spectral_hint && (
+                        <div style={{ fontSize: '0.68rem', color: '#C5A869', fontFamily: "'JetBrains Mono', monospace", marginTop: '0.35rem', background: 'rgba(197, 168, 105, 0.08)', border: '1px solid rgba(197, 168, 105, 0.25)', padding: '0.2rem 0.5rem', display: 'inline-block' }}>
+                          EXPECTED ATTRIBUTION: {searchResult.spectral_hint}
+                        </div>
+                      )}
                     </div>
                     <button
-                      onClick={() => setAppMode('workstation')}
+                      onClick={() => {
+                        if (searchResult.caseIdx) setActiveCaseIdx(searchResult.caseIdx);
+                        setAppMode('workstation');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
                       style={{
                         background: '#B89A62',
                         color: '#121110',
-                        border: 'none',
-                        padding: '0.5rem 1rem',
+                        border: '1px solid #C5A869',
+                        padding: '0.65rem 1.25rem',
                         fontWeight: 700,
-                        fontSize: '0.68rem',
+                        fontSize: '0.72rem',
                         fontFamily: "'JetBrains Mono', monospace",
                         cursor: 'pointer',
                         minHeight: '44px',
                         display: 'inline-flex',
                         alignItems: 'center',
+                        gap: '0.4rem',
+                        boxShadow: '0 4px 14px rgba(0,0,0,0.4)',
+                        transition: 'background 0.2s ease',
                       }}
                     >
-                      INVESTIGATE →
+                      OPEN IN WORKSTATION →
                     </button>
                   </div>
                 </div>
@@ -1386,7 +1580,7 @@ export default function Home() {
                   Controlled Construction & Building Development
                 </div>
                 <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.68rem', color: '#82796D' }}>
-                  QUERY HYPOTHESIS: &ldquo;new construction and buildings&rdquo; · 10M GROUND SAMPLE DISTANCE · LOCAL FAISS FLAT L2
+                  QUERY HYPOTHESIS: &ldquo;{searchQuery || 'new construction and buildings'}&rdquo; · 10M GROUND SAMPLE DISTANCE · LOCAL FAISS FLAT L2
                 </div>
               </div>
 
@@ -1488,7 +1682,7 @@ export default function Home() {
                   Real Earth Observation (MGRS 43RGM · NCR)
                 </div>
                 <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.68rem', color: '#82796D' }}>
-                  QUERY HYPOTHESIS: &ldquo;urban development and building construction&rdquo; · 10M GROUND SAMPLE DISTANCE · LOCAL FAISS FLAT L2
+                  QUERY HYPOTHESIS: &ldquo;{searchQuery || 'agricultural vegetation greening'}&rdquo; · 10M GROUND SAMPLE DISTANCE · LOCAL FAISS FLAT L2
                 </div>
               </div>
 

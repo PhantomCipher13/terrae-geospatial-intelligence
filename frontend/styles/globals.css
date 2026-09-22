@@ -1580,6 +1580,34 @@ div[data-testid="stTextInput"] input:focus {
     box-sizing: border-box;
     white-space: nowrap;
 }
+.hero-category-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 0.65rem;
+}
+.hero-cat-btn {
+    background: transparent;
+    color: #82796D;
+    border: 1px solid #2A2722;
+    padding: 0.25rem 0.6rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 2px;
+}
+.hero-cat-btn:hover {
+    color: #FBF9F4;
+    border-color: #5A544A;
+}
+.hero-cat-btn.active {
+    color: #121110;
+    background: #C5A869;
+    border-color: #C5A869;
+    font-weight: 700;
+}
 .hero-chips-row {
     display: flex;
     flex-wrap: wrap;
@@ -1597,11 +1625,29 @@ div[data-testid="stTextInput"] input:focus {
     min-height: 38px;
     display: inline-flex;
     align-items: center;
+    gap: 0.35rem;
     transition: all 0.2s ease;
 }
 .hero-chip-btn:hover {
     color: #FBF9F4;
     border-color: #C5A869;
+}
+.hero-chip-btn.active {
+    color: #FBF9F4;
+    border-color: #C5A869;
+    background: rgba(197, 168, 105, 0.18);
+    font-weight: 600;
+}
+.hero-candidate-card {
+    background: rgba(18, 17, 16, 0.95);
+    border: 1px solid #C5A869;
+    border-left: 3px solid #C5A869;
+    padding: 0.95rem 1.15rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    animation: fadeIn 0.25s ease-in-out;
 }
 
 /* Section 02 Philosophy */
